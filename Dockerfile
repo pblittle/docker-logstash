@@ -11,7 +11,7 @@ RUN cd /opt && \
   wget https://download.elasticsearch.org/logstash/logstash/logstash-1.3.3-flatjar.jar && \
   mv ./logstash-1.3.3-flatjar.jar ./logstash.jar
 
-ADD https://gist.github.com/pblittle/8778567/raw/1170e2f41f67470807c1cbf3fb5d4d3ce3222d60/logstash.conf \
+ADD https://gist.github.com/pblittle/8778567/raw/8fca528b739262123dbb2e507f0d80db90162348/logstash.conf \
   /opt/logstash.conf
 
 ADD . /logstash
