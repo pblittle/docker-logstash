@@ -1,4 +1,4 @@
-FROM ubuntu:12.04
+FROM ubuntu:precise
 MAINTAINER P. Barrett Little <barrett@barrettlittle.com>
 
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe multiverse" > /etc/apt/sources.list
