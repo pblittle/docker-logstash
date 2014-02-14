@@ -24,7 +24,7 @@ RUN cd /opt && \
     mv ./logstash-1.3.3-flatjar.jar ./logstash.jar
 
 # Copy build files to container root
-ADD . /logstash
+ADD . /app
 
 # Kibana
 EXPOSE 9292
@@ -33,4 +33,4 @@ EXPOSE 9292
 EXPOSE 514
 
 # Start LogStash
-CMD "/logstash/run.sh"
+ENTRYPOINT ["/app/run.sh"]
