@@ -1,6 +1,8 @@
 FROM ubuntu:precise
 MAINTAINER P. Barrett Little <barrett@barrettlittle.com>
 
+ENV DEBIAN_FRONTEND noninteractive
+
 # Update OS apt sources
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe multiverse" \
     > /etc/apt/sources.list
