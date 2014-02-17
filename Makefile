@@ -4,9 +4,12 @@ build:
 run:
 	docker run -d \
 		-e JAVA_OPTS=-Xmx128M \
+		-e ES_HOST=127.0.0.1 \
+		-e ES_PORT=9200 \
 		-p 514:514 \
+		-p 9200:9200 \
 		-p 9292:9292 \
-		-v /mnt/logstash:/logstash \
+		-name logstash \
 		pblittle/docker-logstash
 
 shell:
