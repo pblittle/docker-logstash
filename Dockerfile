@@ -3,6 +3,8 @@ MAINTAINER P. Barrett Little <barrett@barrettlittle.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 
+RUN locale-gen en_US.UTF-8
+
 # Update OS apt sources
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe multiverse" \
     > /etc/apt/sources.list
