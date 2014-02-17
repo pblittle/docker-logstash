@@ -1,5 +1,5 @@
 build:
-	docker build -t pblittle/docker-logstash .
+	docker build -rm=true -t pblittle/docker-logstash .
 
 run:
 	docker run -d \
