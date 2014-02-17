@@ -39,4 +39,4 @@ EXPOSE 9292
 EXPOSE 514
 
 # Start LogStash
-ENTRYPOINT ["/app/run.sh"]
+ENTRYPOINT ["/app/bin/boot"]
