@@ -26,7 +26,11 @@ RUN cd /opt && \
     mv ./logstash-1.3.3-flatjar.jar ./logstash.jar
 
 # Copy build files to container root
+RUN mkdir /app
 ADD . /app
+
+# Elasticsearch
+EXPOSE 9200
 
 # Kibana
 EXPOSE 9292
