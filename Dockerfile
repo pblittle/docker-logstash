@@ -13,12 +13,12 @@ RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe multiverse"
 RUN apt-get update
 RUN apt-get -yq upgrade
 
-# Install build-essential
-RUN apt-get install -yq build-essential
-
-# Install Wget and OpenJDK 7
-RUN apt-get install -yq wget && \
-    apt-get install -yq openjdk-7-jre-headless
+# Install dependencies
+RUN apt-get install -yq \
+    build-essential \
+    ca-certificates \
+    openjdk-7-jre-headless \
+    wget
 
 # Download version 1.3.3 of LogStash
 RUN cd /opt && \
