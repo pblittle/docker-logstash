@@ -1,18 +1,48 @@
 #!/bin/bash
 
-LOGSTASH_CONFIG_FILE="/opt/logstash.conf"
-LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL:-}
+set -e
+set -x
 
+# Use the LOGSTASH_CONFIG_URL env var to download and use your
+# logstash.conf file.
+LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL:-}
+LOGSTASH_CONFIG_FILE="/opt/logstash.conf"
+
+# If you don't provide a value for the LOGSTASH_CONFIG_URL env
+# var, your install will default to our very basic logstash.conf file.
 if [ -z "${LOGSTASH_CONFIG_URL}" ]; then
     LOGSTASH_CONFIG_URL="https://gist.github.com/pblittle/8778567/raw/logstash.conf"
 fi
 
 wget $LOGSTASH_CONFIG_URL -O $LOGSTASH_CONFIG_FILE
 
+# This magic will replace ES_HOST and ES_PORT in your logstash.conf
+# file if they exist with the IP and port dynamically generated
+# by docker. Take a look at the readme for more details.
 sed -e "s/ES_HOST/${ES_PORT_9200_TCP_ADDR}/g" \
     -e "s/ES_PORT/${ES_PORT_9200_TCP_PORT}/g" \
     -i $LOGSTASH_CONFIG_FILE
 
+# Default path for SSL certificates
+SSL_CERT_PATH="/opt/ssl"
+
+# The default logstash-forwarder keys are insecure. Please do not
+# use them in production. Set the LF_SSL_CERT_KEY_URL and LF_SSL_CERT_URL
+# env vars to use your secure keys.
+LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL:-"https://gist.github.com/pblittle/8994708/raw/insecure-logstash-forwarder.key"}
+LF_SSL_CERT_URL=${LF_SSL_CERT_URL:-"https://gist.github.com/pblittle/8994726/raw/insecure-logstash-forwarder.crt"}
+
+# Your keys will be renamed to logstash-forwarder
+LF_SSL_CERT_KEY_FILE="${SSL_CERT_PATH}/logstash-forwarder.key"
+LF_SSL_CERT_FILE="${SSL_CERT_PATH}/logstash-forwarder.crt"
+
+mkdir -p $SSL_CERT_PATH
+
+# Download logstash-forwarder key and certificate
+wget $LF_SSL_CERT_URL -O $LF_SSL_CERT_FILE
+wget $LF_SSL_CERT_KEY_URL -O $LF_SSL_CERT_KEY_FILE
+
+# Fire up logstash!
 exec java \
      ${JAVA_OPTS} \
      -jar /opt/logstash.jar \
