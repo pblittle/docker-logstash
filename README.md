@@ -21,7 +21,7 @@ If you want to link to an external elasticsearch container rather than the embed
 In addition to the link, if you want your elasticsearch node's `bind_host` and `port` automatically detected, you will need to set `ES_HOST` and `ES_PORT` placeholders in your `elasticsearch` definition in your logstash config file.
 
 	output {
-	  stdout { 
+	  stdout {
 	    codec => rubydebug
 	    debug => true
 	    debug_format => "json"
@@ -41,7 +41,7 @@ Without any configuration changes, an example `logstash.conf` will be created fo
       -name logstash \
 	  -p 514:514 \
 	  -p 9292:9292 \
-	  -e LOGSTASH_CONFIG_URL=https://gist.github.com/pblittle/8778567/raw/ff398516beff41a28700aca7094a0420efbb346a/logstash.conf \
+	  -e LOGSTASH_CONFIG_URL=https://gist.github.com/pblittle/8778567/raw/logstash.conf \
 	  pblittle/docker-logstash
 
 Special shoutout to ehazlett's excellent post, [Logstash and Kibana3 via Docker][1], explaining the big picture.
