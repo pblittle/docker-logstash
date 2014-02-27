@@ -2,8 +2,8 @@ This is a logstash (1.3.3) image that is configurable to run using either the em
 
 Prerequisites:
 ----
-Vagrant 
-VirtualBox
+1. Vagrant 
+2. VirtualBox
 
 ## Starting you virtual machine
 The included Vagrantfile will get you an initial VM running in VirtualBox.  Both commands are run inside the directory with your Vagrantfile.
