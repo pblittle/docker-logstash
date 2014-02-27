@@ -2,7 +2,7 @@ This is a logstash (1.3.3) image that is configurable to run using either the em
 
 Prerequisites:
 ----
-Vagrant
+Vagrant 
 VirtualBox
 
 ## Starting you virtual machine
