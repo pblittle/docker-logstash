@@ -1,6 +1,18 @@
 This is a logstash (1.3.3) image that is configurable to run using either the embedded elasticsearch or an elasticsearch node running in a separate container.
 
-To fetch and start  a container running Logstash (1.3.3), elasticsearch (0.90.9) and Kibana 3, simply:
+Prerequisites:
+----
+1. Vagrant 
+2. VirtualBox
+
+## Starting you virtual machine
+The included Vagrantfile will get you an initial VM running in VirtualBox.  Both commands are run inside the directory with your Vagrantfile.
+
+	vagrant up
+	vagrant ssh #this will put you into the virtual machine
+
+## Starting Docker with a logstash container 
+To fetch and start  a container running Logstash (1.3.3), elasticsearch (0.90.9) and Kibana 3, simply do the following inside your virtual machine (the shell opened by running `vagrant ssh` above):
 
 	docker run -d \
 	  -name logstash \
