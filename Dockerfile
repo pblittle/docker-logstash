@@ -1,4 +1,4 @@
-FROM pblittle/base:0.2.2
+FROM pblittle/base:0.3.0
 MAINTAINER P. Barrett Little <barrett@barrettlittle.com>
 
 # Download latest package lists

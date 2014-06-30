@@ -30,7 +30,6 @@ run:
 		-e LF_SSL_CERT_URL=${LF_SSL_CERT_URL} \
 		-e LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL} \
 		-p ${ES_PORT}:${ES_PORT} \
-		-p 22 \
 		-p 514:514 \
 		-p 9292:9292 \
 		-name logstash \
