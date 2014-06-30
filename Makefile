@@ -23,7 +23,6 @@ build:
 
 run:
 	docker run -d \
-		-e JAVA_OPTS=-Xmx128M \
 		-e LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL} \
 		-e ES_HOST=${ES_HOST} \
 		-e ES_PORT=${ES_PORT} \
