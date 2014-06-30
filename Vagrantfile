@@ -1,10 +1,13 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+BASE_BOX = 'ubuntu-14.04-amd64-vbox'
+BASE_BOX_URL = "https://oss-binaries.phusionpassenger.com/vagrant/boxes/latest/#{BASE_BOX}.box"
+
 Vagrant.configure('2') do |config|
 
-  config.vm.box = "phusion-open-ubuntu-12.04-amd64"
-  config.vm.box_url = "https://oss-binaries.phusionpassenger.com/vagrant/boxes/ubuntu-12.04.3-amd64-vbox.box"
+  config.vm.box = BASE_BOX
+  config.vm.box_url = BASE_BOX_URL
 
   config.vm.network :private_network, ip: "192.168.33.10"
   config.vm.network :forwarded_port, guest: 514, host: 514

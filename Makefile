@@ -1,5 +1,5 @@
 NAME = pblittle/docker-logstash
-VERSION = 0.2.0
+VERSION = 0.3.0
 
 # Set the LOGSTASH_CONFIG_URL env var to your logstash.conf file.
 # We will use our basic config if the value is empty.
@@ -30,7 +30,6 @@ run:
 		-e LF_SSL_CERT_URL=${LF_SSL_CERT_URL} \
 		-e LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL} \
 		-p ${ES_PORT}:${ES_PORT} \
-		-p 22 \
 		-p 514:514 \
 		-p 9292:9292 \
 		-name logstash \
