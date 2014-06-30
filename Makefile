@@ -19,7 +19,7 @@ LF_SSL_CERT_KEY_URL ?= https://gist.github.com/pblittle/8994708/raw/insecure-log
 LF_SSL_CERT_URL ?= https://gist.github.com/pblittle/8994726/raw/insecure-logstash-forwarder.crt
 
 build:
-	docker build -rm -t $(NAME):$(VERSION) .
+	docker build --rm -t $(NAME):$(VERSION) .
 
 run:
 	docker run -d \
@@ -32,7 +32,7 @@ run:
 		-p ${ES_PORT}:${ES_PORT} \
 		-p 514:514 \
 		-p 9292:9292 \
-		-name logstash \
+		--name logstash \
 		$(NAME):$(VERSION)
 
 tag:
@@ -42,4 +42,4 @@ release:
 	docker push $(NAME)
 
 shell:
-	docker run -t -i -rm $(NAME):$(VERSION) bash
+	docker run -t -i --rm $(NAME):$(VERSION) bash
