@@ -58,3 +58,16 @@ From there, to build and create a running container from the newly created image
 Special shoutout to ehazlett's excellent post, [Logstash and Kibana3 via Docker][1], explaining the big picture.
 
   [1]: http://ehazlett.github.io/applications/2013/08/28/logstash-kibana/
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
+## License
+
+This application is distributed under the
+[Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
