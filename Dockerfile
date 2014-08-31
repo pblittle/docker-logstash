@@ -1,4 +1,4 @@
-FROM pblittle/base:0.3.0
+FROM ubuntu:14.04
 MAINTAINER P. Barrett Little <barrett@barrettlittle.com>
 
 # Download latest package lists
