@@ -18,6 +18,7 @@ RUN cd /tmp && \
 
 # Install contrib plugins
 RUN /opt/logstash/bin/plugin install contrib
+
 # Copy build files to container root
 RUN mkdir /app
 ADD . /app
