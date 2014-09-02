@@ -1,5 +1,5 @@
 NAME = pblittle/docker-logstash
-VERSION = 0.5.0
+VERSION = 0.6.0
 
 # Set the LOGSTASH_CONFIG_URL env var to your logstash.conf file.
 # We will use our basic config if the value is empty.
@@ -18,27 +18,38 @@ ES_PORT ?= 9200
 LF_SSL_CERT_KEY_URL ?= https://gist.github.com/pblittle/8994708/raw/insecure-logstash-forwarder.key
 LF_SSL_CERT_URL ?= https://gist.github.com/pblittle/8994726/raw/insecure-logstash-forwarder.crt
 
+define docker_run_flags
+-e LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL} \
+-e LF_SSL_CERT_URL=${LF_SSL_CERT_URL} \
+-e LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL} \
+-e ES_HOST=${ES_HOST} \
+-e ES_PORT=${ES_PORT} \
+-p ${ES_PORT}:${ES_PORT} \
+-p 514:514 \
+-p 9292:9292 \
+-v /dev/log:/dev/log
+endef
+
+ifdef ES_CONTAINER
+	docker_run_flags += --link $(ES_CONTAINER):es
+endif
+
+.PHONY: build
 build:
 	docker build --rm -t $(NAME):$(VERSION) .
 
+.PHONY: run
 run:
-	docker run -d \
-		-e LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL} \
-		-e ES_HOST=${ES_HOST} \
-		-e ES_PORT=${ES_PORT} \
-		-e LF_SSL_CERT_URL=${LF_SSL_CERT_URL} \
-		-e LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL} \
-		-p ${ES_PORT}:${ES_PORT} \
-		-p 514:514 \
-		-p 9292:9292 \
-		--name logstash \
-		$(NAME):$(VERSION)
+	docker run -d $(docker_run_flags) --name logstash $(NAME):$(VERSION)
 
+.PHONY: tag
 tag:
 	docker tag $(NAME):$(VERSION) $(NAME):latest
 
+.PHONY: build
 release:
 	docker push $(NAME)
 
+.PHONY: shell
 shell:
 	docker run -t -i --rm $(NAME):$(VERSION) bash
