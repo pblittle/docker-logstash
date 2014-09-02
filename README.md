@@ -1,10 +1,10 @@
 # docker-logstash
 
-This is a logstash (1.4.2) image that can be configured to run using either the embedded elasticsearch server, a linked container, or an external server.
+This is a logstash (1.4.2) image that can be configured to run using either the embedded elasticsearch server, a linked container, or an external elasticsearch server.
 
 ## Optional step, build image from source
 
-If you prefer to build from source rather than use the [pblittle/docker-logstash][1] trusted build published to the public Docker Registry, execute:
+If you prefer to build from source rather than use the [pblittle/docker-logstash][1] trusted build published to the public Docker Registry, execute the following from the project root:
 
     $ make build
 
@@ -43,6 +43,9 @@ If you are using an external elasticsearch server rather than an embedded or lin
 ## Logstash configuration
 
 Without any environment changes, an [example configuration file][2] will be created for you. You can override the example config by setting the `LOGSTASH_CONFIG_URL` environment variable to a file accessible via `wget`.
+
+    $ LOGSTASH_CONFIG_URL=https://gist.github.com/pblittle/8778567/raw/logstash.conf
+    $ make run
 
 ## Test locally using Vagrant
 
