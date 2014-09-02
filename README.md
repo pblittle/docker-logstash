@@ -21,7 +21,6 @@ To fetch and start a container running logstash (1.4.2), elasticsearch (1.1.1) a
 If you want to link to another container running elasticsearch rather than the embedded server, set the `ES_CONTAINER` environment variable to your existing elasticsearch container name.
 
     $ ES_CONTAINER=<your_es_container>
-    $
     $ make run
 
 In addition to the link, if you want your elasticsearch node's `bind_host` and `port` automatically detected, you will need to set the `ES_HOST` and `ES_PORT` placeholders in your `elasticsearch` definition in your logstash config file. For example:
@@ -39,7 +38,6 @@ If you are using an external elasticsearch server rather than an embedded or lin
 
     $ ES_HOST=<your_es_host>
     $ ES_PORT=<your_es_port>
-    $
     $ make run
 
 ## Logstash configuration
@@ -50,20 +48,20 @@ Without any environment changes, an [example configuration file][2] will be crea
 
 To build the image locally using Vagrant, perform the following steps from the project root:
 
-    vagrant up
-    vagrant ssh
-    cd /vagrant
+    $ vagrant up
+    $ vagrant ssh
+    $ cd /vagrant
 
 From there, build and run a container using the newly created virtual machine:
 
-    make build
-    make run
+    $ make build
+    $ make run
 
 You can now verify the logstash installation by visiting the [prebuilt logstash dashboard][3] running in the newly created container.
 
 ## Acknowledgements
 
-Special shoutout to @ehazlett's excellent post, [Logstash and Kibana3 via Docker][4], explaining the big picture.
+Special shoutout to @ehazlett's excellent post, [Logstash and Kibana3 via Docker][4].
 
 ## Contributing
 
