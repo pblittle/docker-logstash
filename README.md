@@ -47,6 +47,8 @@ Without any environment changes, an [example configuration file][2] will be crea
     $ LOGSTASH_CONFIG_URL=https://gist.github.com/pblittle/8778567/raw/logstash.conf
     $ make run
 
+This config file set by `LOGSTASH_CONFIG_URL` will be downloaded, moved to `/opt/logstash.conf`, and used in your container.
+
 ## Test locally using Vagrant
 
 To build the image locally using Vagrant, perform the following steps from the project root:
