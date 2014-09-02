@@ -1,50 +1,52 @@
 # docker-logstash
 
-This is a logstash (1.4.2) image that is configurable to run using either the embedded elasticsearch or an elasticsearch node running in a separate container.
+This is a logstash (1.4.2) image that can be configured to run using either the embedded elasticsearch server, a linked container, or an external server.
+
+## Optional step, build image from source
+
+If you prefer to build from source rather than use the [pblittle/docker-logstash][1] trusted build published to the public Docker Registry, execute:
+
+    $ make build
+
+## Run Logstash
+
+### Use the embedded Elasticsearch server
 
 To fetch and start a container running logstash (1.4.2), elasticsearch (1.1.1) and Kibana 3 (3.0.1), simply:
 
-    docker run -d \
-      --name logstash \
-      -p 514:514 \
-      -p 9200:9200 \
-      -p 9292:9292 \
-      pblittle/docker-logstash
+    $ make run
 
-If you want to link to an external elasticsearch container rather than the embedded server, add a link flag with your existing elasticsearch container's name. For example, to link to a container named `elasticsearch`:
+### Use a linked Elasticsearch container
 
-    docker run -d \
-      --name logstash \
-      -link elasticsearch:es \
-      -p 514:514 \
-      -p 9292:9292 \
-      pblittle/docker-logstash
+If you want to link to another container running elasticsearch rather than the embedded server, set the `ES_CONTAINER` environment variable to your existing elasticsearch container name.
 
-In addition to the link, if you want your elasticsearch node's `bind_host` and `port` automatically detected, you will need to set `ES_HOST` and `ES_PORT` placeholders in your `elasticsearch` definition in your logstash config file.
+    $ ES_CONTAINER=<your_es_container>
+    $
+    $ make run
+
+In addition to the link, if you want your elasticsearch node's `bind_host` and `port` automatically detected, you will need to set the `ES_HOST` and `ES_PORT` placeholders in your `elasticsearch` definition in your logstash config file. For example:
 
     output {
-      stdout {
-        codec => rubydebug
-        debug => true
-        debug_format => "json"
-      }
-
       elasticsearch {
         bind_host => "ES_HOST"
         port => "ES_PORT"
       }
     }
 
-Alternatively, you can replace the placeholder values with the real elasticsearch `bind_host` and `port` values.
+### Use an external Elasticsearch server
 
-Without any configuration changes, an example `logstash.conf` will be created for you. You can override the example config by passing a `LOGSTASH_CONFIG_URL` env var in your `docker run` command using a `-e` flag pointing to your config file.
+If you are using an external elasticsearch server rather than an embedded or linked server, simply set the `ES_HOST` and `ES_PORT` environment variables.
 
-    docker run -d \
-      --name logstash \
-      -p 514:514 \
-      -p 9292:9292 \
-      -e LOGSTASH_CONFIG_URL=https://gist.github.com/pblittle/8778567/raw/logstash.conf \
-      pblittle/docker-logstash
+    $ ES_HOST=<your_es_host>
+    $ ES_PORT=<your_es_port>
+    $
+    $ make run
+
+## Logstash configuration
+
+Without any environment changes, an [example configuration file][2] will be created for you. You can override the example config by setting the `LOGSTASH_CONFIG_URL` environment variable to a file accessible via `wget`.
+
+## Test locally using Vagrant
 
 To build the image locally using Vagrant, perform the following steps from the project root:
 
@@ -52,14 +54,16 @@ To build the image locally using Vagrant, perform the following steps from the p
     vagrant ssh
     cd /vagrant
 
-From there, to build and create a running container from the newly created image:
+From there, build and run a container using the newly created virtual machine:
 
     make build
     make run
 
-You can now verify the logstash installation by visiting the [prebuilt logstash dashboard][1] running in the newly created Vagrant container.
+You can now verify the logstash installation by visiting the [prebuilt logstash dashboard][3] running in the newly created container.
 
-Special shoutout to ehazlett's excellent post, [Logstash and Kibana3 via Docker][2], explaining the big picture.
+## Acknowledgements
+
+Special shoutout to @ehazlett's excellent post, [Logstash and Kibana3 via Docker][4], explaining the big picture.
 
 ## Contributing
 
@@ -71,9 +75,10 @@ Special shoutout to ehazlett's excellent post, [Logstash and Kibana3 via Docker]
 
 ## License
 
-This application is distributed under the
-[Apache License, Version 2.0][3].
+This application is distributed under the [Apache License, Version 2.0][5].
 
-[1]: http://192.168.33.10:9292/index.html#/dashboard/file/logstash.json
-[2]: http://ehazlett.github.io/applications/2013/08/28/logstash-kibana/
-[3]: http://www.apache.org/licenses/LICENSE-2.0
+[1]: https://registry.hub.docker.com/u/pblittle/docker-logstash
+[2]: https://gist.github.com/pblittle/8778567/raw/logstash.conf
+[3]: http://192.168.33.10:9292/index.html#/dashboard/file/logstash.json
+[4]: http://ehazlett.github.io/applications/2013/08/28/logstash-kibana/
+[5]: http://www.apache.org/licenses/LICENSE-2.0

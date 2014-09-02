@@ -1,7 +1,10 @@
 #!/bin/bash
 
-set -e
-set -x
+# Fail fast, including pipelines
+set -eo pipefail
+
+# Set LOGSTASH_TRACE to enable debugging
+[[ $LOGSTASH_TRACE ]] && set -x
 
 # Use the LOGSTASH_CONFIG_URL env var to download and use your
 # logstash.conf file.
