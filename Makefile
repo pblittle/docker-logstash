@@ -24,8 +24,6 @@ define docker_run_flags
 -e LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL} \
 -e ES_HOST=${ES_HOST} \
 -e ES_PORT=${ES_PORT} \
--p ${ES_PORT}:${ES_PORT} \
--p 514:514 \
 -p 9292:9292 \
 -v /dev/log:/dev/log
 endef
