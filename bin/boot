@@ -17,14 +17,21 @@ if [ -z "${LOGSTASH_CONFIG_URL}" ]; then
     LOGSTASH_CONFIG_URL="https://gist.github.com/pblittle/8778567/raw/logstash.conf"
 fi
 
-wget $LOGSTASH_CONFIG_URL -O $LOGSTASH_CONFIG_FILE
+# Download default conf is none present
+if [ ! -f $LOGSTASH_CONFIG_FILE ]; then
+    echo "Downloading default configuration file"
+    wget $LOGSTASH_CONFIG_URL -O $LOGSTASH_CONFIG_FILE
+fi
 
-# This magic will replace ES_HOST and ES_PORT in your logstash.conf
-# file if they exist with the IP and port dynamically generated
-# by docker. Take a look at the readme for more details.
-sed -e "s/ES_HOST/${ES_PORT_9200_TCP_ADDR}/g" \
-    -e "s/ES_PORT/${ES_PORT_9200_TCP_PORT}/g" \
-    -i $LOGSTASH_CONFIG_FILE
+# If we can write to config file, replace IP and port
+if [ -w $LOGSTASH_CONFIG_FILE ]; then
+    # This magic will replace ES_HOST and ES_PORT in your logstash.conf
+    # file if they exist with the IP and port dynamically generated
+    # by docker. Take a look at the readme for more details.
+    sed -e "s/ES_HOST/${ES_PORT_9200_TCP_ADDR}/g" \
+        -e "s/ES_PORT/${ES_PORT_9200_TCP_PORT}/g" \
+        -i $LOGSTASH_CONFIG_FILE
+fi
 
 # Default path for SSL certificates
 SSL_CERT_PATH="/opt/ssl"
