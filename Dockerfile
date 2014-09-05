@@ -23,14 +23,8 @@ RUN /opt/logstash/bin/plugin install contrib
 RUN mkdir /app
 ADD . /app
 
-# Elasticsearch
-EXPOSE 9200
-
 # Kibana
 EXPOSE 9292
-
-# Syslog
-EXPOSE 514
 
 # Start logstash
 ENTRYPOINT ["/app/bin/boot"]
