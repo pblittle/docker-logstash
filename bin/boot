@@ -6,25 +6,33 @@ set -eo pipefail
 # Set LOGSTASH_TRACE to enable debugging
 [[ $LOGSTASH_TRACE ]] && set -x
 
-# Use the LOGSTASH_CONFIG_URL env var to download and use your
-# logstash.conf file.
-LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL:-}
 LOGSTASH_CONFIG_FILE="/opt/logstash.conf"
 
-# If you don't provide a value for the LOGSTASH_CONFIG_URL env
-# var, your install will default to our very basic logstash.conf file.
-if [ -z "${LOGSTASH_CONFIG_URL}" ]; then
-    LOGSTASH_CONFIG_URL="https://gist.github.com/pblittle/8778567/raw/logstash.conf"
+# Download default conf is none present
+if [ ! -f $LOGSTASH_CONFIG_FILE ]; then
+    # Use the LOGSTASH_CONFIG_URL env var to download and use your
+    # logstash.conf file.
+    LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL:-}
+
+    # If you don't provide a value for the LOGSTASH_CONFIG_URL env
+    # var, your install will default to our very basic logstash.conf file.
+    if [ -z "$LOGSTASH_CONFIG_URL" ]; then
+        LOGSTASH_CONFIG_URL="https://gist.github.com/pblittle/8778567/raw/logstash.conf"
+    fi
+
+    echo "Downloading default configuration file"
+    wget $LOGSTASH_CONFIG_URL -O $LOGSTASH_CONFIG_FILE
+
+    # This magic will replace ES_HOST and ES_PORT in your logstash.conf
+    # file if they exist with the IP and port dynamically generated
+    # by docker. Take a look at the readme for more details.
+    # Note: Don't use this on a file mounting using a docker
+    # volume, as the inode switch will cause `device or resource busy`
+    # Instead download your file as normal
+    sed -e "s/ES_HOST/${ES_PORT_9200_TCP_ADDR}/g" \
+        -e "s/ES_PORT/${ES_PORT_9200_TCP_PORT}/g" \
+        -i $LOGSTASH_CONFIG_FILE
 fi
-
-wget $LOGSTASH_CONFIG_URL -O $LOGSTASH_CONFIG_FILE
-
-# This magic will replace ES_HOST and ES_PORT in your logstash.conf
-# file if they exist with the IP and port dynamically generated
-# by docker. Take a look at the readme for more details.
-sed -e "s/ES_HOST/${ES_PORT_9200_TCP_ADDR}/g" \
-    -e "s/ES_PORT/${ES_PORT_9200_TCP_PORT}/g" \
-    -i $LOGSTASH_CONFIG_FILE
 
 # Default path for SSL certificates
 SSL_CERT_PATH="/opt/ssl"
