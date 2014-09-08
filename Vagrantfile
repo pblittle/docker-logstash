@@ -23,8 +23,9 @@ Vagrant.configure('2') do |config|
   config.vm.box_url = BOX_URL
 
   config.vm.network :private_network, ip: MACHINE_IP
-  config.vm.network :forwarded_port, guest: 9200, host: 9200
   config.vm.network :forwarded_port, guest: 9292, host: 9292
+  config.vm.network :forwarded_port, guest: 9200, host: 9200
+  config.vm.network :forwarded_port, guest: 9300, host: 9300
 
   config.vm.synced_folder './', '/vagrant'
 

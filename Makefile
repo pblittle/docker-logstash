@@ -44,7 +44,7 @@ run:
 tag:
 	docker tag $(NAME):$(VERSION) $(NAME):latest
 
-.PHONY: build
+.PHONY: release
 release:
 	docker push $(NAME)
 
