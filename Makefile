@@ -3,6 +3,7 @@ VERSION = 0.7.0
 
 # Set the LOGSTASH_CONFIG_URL env var to your logstash.conf file.
 # We will use our basic config if the value is empty.
+#
 LOGSTASH_CONFIG_URL ?= https://gist.github.com/pblittle/8778567/raw/logstash.conf
 
 # This default host and port are for using the embedded elasticsearch
@@ -40,6 +41,9 @@ build:
 run:
 	docker run -d $(docker_run_flags) --name logstash $(NAME):$(VERSION)
 
+.PHONY: shell
+shell:
+	docker run -t -i --rm $(NAME):$(VERSION) /bin/bash
 .PHONY: tag
 tag:
 	docker tag $(NAME):$(VERSION) $(NAME):latest
@@ -47,7 +51,3 @@ tag:
 .PHONY: release
 release:
 	docker push $(NAME)
-
-.PHONY: shell
-shell:
-	docker run -t -i --rm $(NAME):$(VERSION) bash
