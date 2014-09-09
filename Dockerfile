@@ -24,10 +24,10 @@ RUN /opt/logstash/bin/plugin install contrib
 RUN mkdir /app
 ADD . /app
 
-# Elasticsearch HTTP port
+# Elasticsearch HTTP
 EXPOSE 9200
 
-# Elasticsearch transport port
+# Elasticsearch transport
 EXPOSE 9300
 
 # Kibana
