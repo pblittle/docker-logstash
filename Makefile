@@ -20,12 +20,12 @@ LF_SSL_CERT_URL ?= https://gist.github.com/pblittle/8994726/raw/insecure-logstas
 
 define docker_run_flags
 -e LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL} \
--e LF_SSL_CERT_URL=${LF_SSL_CERT_URL} \
--e LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL} \
 -e ES_HOST=${ES_HOST} \
 -e ES_PORT=${ES_PORT} \
--p 9292:9292 \
--v /dev/log:/dev/log
+-e LF_SSL_CERT_URL=${LF_SSL_CERT_URL} \
+-e LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL} \
+-p ${ES_PORT}:${ES_PORT} \
+-p 9292:9292
 endef
 
 ifdef ES_CONTAINER
