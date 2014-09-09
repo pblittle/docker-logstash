@@ -8,7 +8,7 @@ set -eo pipefail
 
 LOGSTASH_CONFIG_FILE="/opt/logstash.conf"
 
-# Download default conf is none present
+# Download default conf if none present
 if [ ! -f $LOGSTASH_CONFIG_FILE ]; then
     # Use the LOGSTASH_CONFIG_URL env var to download and use your
     # logstash.conf file.
@@ -20,12 +20,13 @@ if [ ! -f $LOGSTASH_CONFIG_FILE ]; then
         LOGSTASH_CONFIG_URL="https://gist.github.com/pblittle/8778567/raw/logstash.conf"
     fi
 
-    echo "Downloading default configuration file"
+    echo "Downloading default configuration file ..."
     wget $LOGSTASH_CONFIG_URL -O $LOGSTASH_CONFIG_FILE
 
     # This magic will replace ES_HOST and ES_PORT in your logstash.conf
     # file if they exist with the IP and port dynamically generated
     # by docker. Take a look at the readme for more details.
+    #
     # Note: Don't use this on a file mounting using a docker
     # volume, as the inode switch will cause `device or resource busy`
     # Instead download your file as normal
@@ -55,7 +56,7 @@ wget $LF_SSL_CERT_KEY_URL -O $LF_SSL_CERT_KEY_FILE
 
 # Fire up logstash!
 exec /opt/logstash/bin/logstash \
-     agent \
-     --config $LOGSTASH_CONFIG_FILE \
-     -- \
-     web
+    agent \
+    --config $LOGSTASH_CONFIG_FILE \
+    -- \
+    web

@@ -5,7 +5,8 @@ MAINTAINER P. Barrett Little <barrett@barrettlittle.com>
 RUN apt-get update
 
 # Install dependencies
-RUN apt-get install -yq \
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get install -yq \
     openjdk-7-jre-headless \
     wget
 
@@ -23,10 +24,10 @@ RUN /opt/logstash/bin/plugin install contrib
 RUN mkdir /app
 ADD . /app
 
-# Elasticsearch HTTP port
+# Elasticsearch HTTP
 EXPOSE 9200
 
-# Elasticsearch transport port
+# Elasticsearch transport
 EXPOSE 9300
 
 # Kibana
