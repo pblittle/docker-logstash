@@ -62,7 +62,7 @@ To build the image locally using Vagrant, you will first need to clone the repos
     $ git clone https://github.com/pblittle/docker-logstash.git
     $ cd docker-logstash
 
-Start and provision a virtual machine using the provided Vagrantfile:.
+Start and provision a virtual machine using the provided Vagrantfile:
 
     $ vagrant up
     $ vagrant ssh
