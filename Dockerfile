@@ -5,7 +5,8 @@ MAINTAINER P. Barrett Little <barrett@barrettlittle.com>
 RUN apt-get update
 
 # Install dependencies
-RUN apt-get install -yq \
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get install -yq \
     openjdk-7-jre-headless \
     wget
 
