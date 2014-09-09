@@ -44,6 +44,11 @@ run:
 .PHONY: shell
 shell:
 	docker run -t -i --rm $(NAME):$(VERSION) /bin/bash
+
+.PHONY: test
+test:
+	/bin/bash tests/logstash.sh
+
 .PHONY: tag
 tag:
 	docker tag $(NAME):$(VERSION) $(NAME):latest
