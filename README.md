@@ -10,7 +10,9 @@ If you prefer to build from source rather than use the [pblittle/docker-logstash
 
 ## Running Logstash
 
-To run this logstash image, you have to first choose one of three Elasticsearch configuration options.
+### First, choose an Elasticsearch configuration
+
+To run this logstash image, you have to first choose one of three Elasticsearch configurations.
 
  * Use the embedded Elasticsearch server
  * Use a linked container running Elasticsearch
@@ -20,13 +22,21 @@ To run this logstash image, you have to first choose one of three Elasticsearch 
 
 To fetch and start a container running logstash and the embedded Elasticsearch server, simply execute:
 
+    $ docker run -d -p 9292:9292 -p 9200:9200 pblittle/docker-logstash
+
+Or, if you are working from the project source directory:
+
     $ make run
 
 ### Use a linked container running Elasticsearch
 
 If you want to link to another container running elasticsearch rather than the embedded server, set the `ES_CONTAINER` environment variable to your existing elasticsearch container name.
 
-    $ export ES_CONTAINER=<your_es_container>
+    $ docker run -d --link <your_es_container_name>:es -p 9292:9292 -p 9200:9200 pblittle/docker-logstash
+
+Or, if you are working from the project source directory:
+
+    $ export ES_CONTAINER=<your_es_container_name>
     $ make run
 
 In addition to the link, if you want your elasticsearch node's `bind_host` and `port` automatically detected, you will need to set the `ES_HOST` and `ES_PORT` placeholders in your `elasticsearch` definition in your logstash config file. For example:
@@ -42,8 +52,8 @@ In addition to the link, if you want your elasticsearch node's `bind_host` and `
 
 If you are using an external elasticsearch server rather than an embedded or linked server, simply set the `ES_HOST` and `ES_PORT` environment variables.
 
-    $ export ES_HOST=<your_es_host>
-    $ export ES_PORT=<your_es_port>
+    $ export ES_HOST=<your_es_server_host>
+    $ export ES_PORT=<your_es_server_port>
     $ make run
 
 ## Logstash configuration
