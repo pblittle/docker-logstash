@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM debian:jessie
 MAINTAINER P. Barrett Little <barrett@barrettlittle.com>
 
 # Download latest package lists
