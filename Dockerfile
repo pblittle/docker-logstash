@@ -1,11 +1,9 @@
-FROM ubuntu:14.04
+FROM debian:jessie
 MAINTAINER P. Barrett Little <barrett@barrettlittle.com>
 
-# Download latest package lists
-RUN apt-get update
-
-# Install dependencies
-RUN DEBIAN_FRONTEND=noninteractive \
+# Download latest package lists & install dependencies
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive \
     apt-get install -yq \
     openjdk-7-jre-headless \
     wget
