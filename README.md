@@ -2,15 +2,33 @@
 
 This is a highly configurable logstash (1.4.2) image running elasticsearch (1.1.1) and Kibana 3 (3.0.1).
 
-## Optional first step, build image from source
+## Optional, build and run the image from source
 
-If you prefer to build from source rather than use the [pblittle/docker-logstash][1] trusted build published to the public Docker Registry, execute the following from the project root:
+If you prefer to build from source rather than use the [pblittle/docker-logstash][1] trusted build published to the public Docker Registry, execute the following:
 
+    $ git clone https://github.com/pblittle/docker-logstash.git
+    $ cd docker-logstash
     $ make build
+    $ make <options> run
+
+See below for a complate example using `Vagrant`.
 
 ## Running Logstash
 
-### First, choose an Elasticsearch configuration
+### First, prepare your Logstash configuration file
+
+The logstash configuration file used in this container is downloaded from the internet using `wget`. The configuration file location is determined by the value of the `LOGSTASH_CONFIG_FILE` environment variable, which is set using the `-e` flag when executing `docker run`.
+
+By default, unless `LOGSTASH_CONFIG_FILE` is overridden, an [example configuration file][2] for an embedded Elasticsearch will be downloaded, moved to `/opt/logstash.conf`, and used by logstash in your container.
+
+I have created three reference config files that can be used for testing:
+
+ * [Embedded Elasticsearch server](https://gist.githubusercontent.com/pblittle/8778567/raw/logstash.conf) (default)
+ * [Linked Elasticsearch container](https://gist.githubusercontent.com/pblittle/0b937485fa4a322ea9eb/raw/logstash_linked.conf)
+
+You will find example usage of `-e LOGSTASH_CONFIG_URL=<your_logstash_config_url>` below.
+
+### Second, choose an Elasticsearch install type
 
 To run this logstash image, you have to first choose one of three Elasticsearch configurations.
 
@@ -22,24 +40,35 @@ To run this logstash image, you have to first choose one of three Elasticsearch 
 
 To fetch and start a container running logstash and the embedded Elasticsearch server, simply execute:
 
-    $ docker run -d -p 9292:9292 -p 9200:9200 pblittle/docker-logstash
+    $ docker run -d \
+      -p 9292:9292 \
+      -p 9200:9200 \
+      pblittle/docker-logstash
 
-Or, if you are working from the project source directory:
+If you want to use your own config file rather than the default, don't forget the `LOGSTASH_CONFIG_URL` environment variable as noted above:
 
-    $ make run
+    $ docker run -d \
+      -e LOGSTASH_CONFIG_URL=<your_logstash_config_url> \
+      -p 9292:9292 \
+      -p 9200:9200 \
+      pblittle/docker-logstash
+
+Verify the logstash installation by visiting:
+
+    http://<your_container_ip>:9292/index.html#/dashboard/file/logstash.json
 
 ### Use a linked container running Elasticsearch
 
-If you want to link to another container running elasticsearch rather than the embedded server, set the `ES_CONTAINER` environment variable to your existing elasticsearch container name.
+If you want to link to another container running elasticsearch rather than use the embedded server:
 
-    $ docker run -d --link <your_es_container_name>:es -p 9292:9292 -p 9200:9200 pblittle/docker-logstash
+    $ docker run -d \
+      -e LOGSTASH_CONFIG_URL=<your_logstash_config_url> \
+      --link <your_es_container_name>:es
+      -p 9292:9292
+      -p 9200:9200
+      pblittle/docker-logstash
 
-Or, if you are working from the project source directory:
-
-    $ export ES_CONTAINER=<your_es_container_name>
-    $ make run
-
-In addition to the link, if you want your elasticsearch node's `bind_host` and `port` automatically detected, you will need to set the `ES_HOST` and `ES_PORT` placeholders in your `elasticsearch` definition in your logstash config file. For example:
+To have you the linked elasticsearch container's `bind_host` and `port` automatically detected, you will need to create an `ES_HOST` and `ES_PORT` placeholder in the `elasticsearch` definition in your logstash config file. For example:
 
     output {
       elasticsearch {
@@ -48,22 +77,25 @@ In addition to the link, if you want your elasticsearch node's `bind_host` and `
       }
     }
 
+I have created an [example linked config file](https://gist.githubusercontent.com/pblittle/0b937485fa4a322ea9eb/raw/logstash_linked.conf) which includes the `ES_HOST` and `ES_PORT` placeholders described above.
+
+Verify the logstash installation by visiting:
+
+    http://<your_container_ip>:9292/index.html#/dashboard/file/logstash.json
+
 ### Use an external Elasticsearch server
 
-If you are using an external elasticsearch server rather than an embedded or linked server, simply set the `ES_HOST` and `ES_PORT` environment variables.
+If you are using an external elasticsearch server rather than the embedded server or a linked container, simply provide a configuration file with the Elasticsearch endpoints already configured:
 
-    $ export ES_HOST=<your_es_server_host>
-    $ export ES_PORT=<your_es_server_port>
-    $ make run
+    $ docker run -d \
+      -e LOGSTASH_CONFIG_URL=<your_logstash_config_url> \
+      -p 9292:9292
+      -p 9200:9200
+      pblittle/docker-logstash
 
-## Logstash configuration
+Verify the logstash installation by visiting:
 
-Without any environment changes, an [example configuration file][2] will be created for you. You can override the example config by setting the `LOGSTASH_CONFIG_URL` environment variable to a file accessible via `wget`.
-
-    $ export LOGSTASH_CONFIG_URL=https://gist.github.com/pblittle/8778567/raw/logstash.conf
-    $ make run
-
-This config file set by `LOGSTASH_CONFIG_URL` will be downloaded, moved to `/opt/logstash.conf`, and used in your container.
+    http://<your_container_ip>:9292/index.html#/dashboard/file/logstash.json
 
 ## Test locally using Vagrant
 
@@ -81,7 +113,7 @@ Start and provision a virtual machine using the provided Vagrantfile:
 From there, build and run a container using the newly created virtual machine:
 
     $ make build
-    $ make run
+    $ make <options> run
 
 You can now verify the logstash installation by visiting the [prebuilt logstash dashboard][3] running in the newly created container.
 
