@@ -19,14 +19,14 @@ See below for a complate example using `Vagrant`.
 
 The logstash configuration file used in this container is downloaded from the internet using `wget`. The configuration file location is determined by the value of the `LOGSTASH_CONFIG_FILE` environment variable, which is set using the `-e` flag when executing `docker run`.
 
-By default, unless `LOGSTASH_CONFIG_FILE` is overridden, an [example configuration file][2] for an embedded Elasticsearch will be downloaded, moved to `/opt/logstash.conf`, and used by logstash in your container.
+Unless `LOGSTASH_CONFIG_FILE` is overridden, an [example configuration file][2] for an embedded Elasticsearch will be downloaded, moved to `/opt/logstash.conf`, and used in your container.
 
-I have created three reference config files that can be used for testing:
+I have created two reference config files that can be used for testing:
 
  * [Embedded Elasticsearch server](https://gist.githubusercontent.com/pblittle/8778567/raw/logstash.conf) (default)
  * [Linked Elasticsearch container](https://gist.githubusercontent.com/pblittle/0b937485fa4a322ea9eb/raw/logstash_linked.conf)
 
-You will find example usage of `-e LOGSTASH_CONFIG_URL=<your_logstash_config_url>` below.
+You will find example usage using `-e LOGSTASH_CONFIG_URL=<your_logstash_config_url>` below.
 
 ### Second, choose an Elasticsearch install type
 
@@ -53,10 +53,6 @@ If you want to use your own config file rather than the default, don't forget th
       -p 9200:9200 \
       pblittle/docker-logstash
 
-Verify the logstash installation by visiting:
-
-    http://<your_container_ip>:9292/index.html#/dashboard/file/logstash.json
-
 ### Use a linked container running Elasticsearch
 
 If you want to link to another container running elasticsearch rather than use the embedded server:
@@ -79,10 +75,6 @@ To have you the linked elasticsearch container's `bind_host` and `port` automati
 
 I have created an [example linked config file](https://gist.githubusercontent.com/pblittle/0b937485fa4a322ea9eb/raw/logstash_linked.conf) which includes the `ES_HOST` and `ES_PORT` placeholders described above.
 
-Verify the logstash installation by visiting:
-
-    http://<your_container_ip>:9292/index.html#/dashboard/file/logstash.json
-
 ### Use an external Elasticsearch server
 
 If you are using an external elasticsearch server rather than the embedded server or a linked container, simply provide a configuration file with the Elasticsearch endpoints already configured:
@@ -93,7 +85,9 @@ If you are using an external elasticsearch server rather than the embedded serve
       -p 9200:9200
       pblittle/docker-logstash
 
-Verify the logstash installation by visiting:
+### Finally, verify the installation
+
+You can now verify the logstash installation by visiting the prebuilt logstash dashboard:
 
     http://<your_container_ip>:9292/index.html#/dashboard/file/logstash.json
 
