@@ -6,7 +6,10 @@ set -eo pipefail
 # Set LOGSTASH_TRACE to enable debugging
 [[ $LOGSTASH_TRACE ]] && set -x
 
-LOGSTASH_CONFIG_FILE="/opt/logstash.conf"
+mkdir -p /app/logstash-conf
+LOGSTASH_CONFIG_DIR="/app/logstash-conf"
+LOGSTASH_CONFIG_FILE="/app/logstash-conf/logstash.conf"
+
 
 # Download default conf if none present
 if [ ! -f $LOGSTASH_CONFIG_FILE ]; then
@@ -54,9 +57,12 @@ mkdir -p $SSL_CERT_PATH
 wget $LF_SSL_CERT_URL -O $LF_SSL_CERT_FILE
 wget $LF_SSL_CERT_KEY_URL -O $LF_SSL_CERT_KEY_FILE
 
+# Add custom logstash conf
+#cp /app/logstash-conf/* /opt/logstash/conf.d/
+
 # Fire up logstash!
 exec /opt/logstash/bin/logstash \
     agent \
-    --config $LOGSTASH_CONFIG_FILE \
+    --config $LOGSTASH_CONFIG_DIR \
     -- \
     web

@@ -6,7 +6,7 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get install -yq \
     openjdk-7-jre-headless \
-    wget
+    wget 
 
 # Download version 1.4.2 of logstash
 RUN cd /tmp && \
@@ -20,7 +20,7 @@ RUN /opt/logstash/bin/plugin install contrib
 
 # Copy build files to container root
 RUN mkdir /app
-ADD . /app
+COPY . /app
 
 # Elasticsearch HTTP
 EXPOSE 9200
