@@ -1,4 +1,4 @@
-FROM java:7
+FROM java:7-jre
 MAINTAINER P. Barrett Little <barrett@barrettlittle.com>
 
 # Download version 1.4.2 of logstash
