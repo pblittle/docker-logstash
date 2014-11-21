@@ -1,12 +1,5 @@
-FROM debian:jessie
+FROM java:7-jre
 MAINTAINER P. Barrett Little <barrett@barrettlittle.com>
-
-# Download latest package lists & install dependencies
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive \
-    apt-get install -yq \
-    openjdk-7-jre-headless \
-    wget
 
 # Download version 1.4.2 of logstash
 RUN cd /tmp && \
