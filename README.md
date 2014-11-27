@@ -1,4 +1,4 @@
-# logstash
+# Logstash Dockerfile
 
 This is a highly configurable logstash (1.4.2) image running Elasticsearch (1.1.1) and Kibana 3 (3.0.1).
 
@@ -35,9 +35,9 @@ If you want to link to container running Elasticsearch rather than use the embed
 
     $ docker run -d \
       -e LOGSTASH_CONFIG_URL=<your_logstash_config_url> \
-      --link <your_es_container_name>:es
-      -p 9292:9292
-      -p 9200:9200
+      --link <your_es_container_name>:es \
+      -p 9292:9292 \
+      -p 9200:9200 \
       pblittle/docker-logstash
 
 To have the linked Elasticsearch container's `bind_host` and `port` automatically detected, you will need to create an `ES_HOST` and `ES_PORT` placeholder in the `elasticsearch` definition in your logstash config file. For example:
@@ -57,8 +57,8 @@ If you are using an external Elasticsearch server rather than the embedded serve
 
     $ docker run -d \
       -e LOGSTASH_CONFIG_URL=<your_logstash_config_url> \
-      -p 9292:9292
-      -p 9200:9200
+      -p 9292:9292 \
+      -p 9200:9200 \
       pblittle/docker-logstash
 
 ### Finally, verify the installation
