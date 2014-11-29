@@ -15,12 +15,6 @@ RUN /opt/logstash/bin/plugin install contrib
 RUN mkdir /app
 ADD . /app
 
-# Elasticsearch HTTP
-EXPOSE 9200
-
-# Elasticsearch transport
-EXPOSE 9300
-
 # Kibana
 EXPOSE 9292
 
