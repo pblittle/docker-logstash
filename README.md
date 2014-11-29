@@ -1,6 +1,6 @@
-# logstash
+# Logstash Dockerfile
 
-This is a highly configurable logstash (1.4.2) image running Elasticsearch (1.1.1) and Kibana 3 (3.0.1).
+This is a highly configurable [logstash][7] (1.4.2) image running [Elasticsearch][8] (1.1.1) and [Kibana][9] (3.0.1).
 
 ## How to use this image
 
@@ -12,14 +12,12 @@ To run the image, you have to first decide on one of three Elasticsearch configu
 
 ### Embedded Elasticsearch server
 
-To fetch and start a container using an example [logstash.conf][2] and the embedded Elasticsearch server, simply execute:
+By default, an example [logstash.conf][2] will be downloaded using `wget` and used in your container.
 
     $ docker run -d \
       -p 9292:9292 \
       -p 9200:9200 \
       pblittle/docker-logstash
-
-By default, an example [logstash.conf][2] will be downloaded using `wget`, moved to `/opt/logstash.conf`, and used in your container.
 
 To use your own config file, set the `LOGSTASH_CONFIG_URL` environment variable using the `-e` flag as follows:
 
@@ -35,9 +33,9 @@ If you want to link to container running Elasticsearch rather than use the embed
 
     $ docker run -d \
       -e LOGSTASH_CONFIG_URL=<your_logstash_config_url> \
-      --link <your_es_container_name>:es
-      -p 9292:9292
-      -p 9200:9200
+      --link <your_es_container_name>:es \
+      -p 9292:9292 \
+      -p 9200:9200 \
       pblittle/docker-logstash
 
 To have the linked Elasticsearch container's `bind_host` and `port` automatically detected, you will need to create an `ES_HOST` and `ES_PORT` placeholder in the `elasticsearch` definition in your logstash config file. For example:
@@ -49,7 +47,7 @@ To have the linked Elasticsearch container's `bind_host` and `port` automaticall
       }
     }
 
-I have created an example [logstash_linked.conf](https://gist.githubusercontent.com/pblittle/0b937485fa4a322ea9eb/raw/logstash_linked.conf) which includes the `ES_HOST` and `ES_PORT` placeholders to serve as an example.
+I have created an example [logstash_linked.conf][6] which includes the `ES_HOST` and `ES_PORT` placeholders to serve as an example.
 
 ### External Elasticsearch server
 
@@ -57,8 +55,8 @@ If you are using an external Elasticsearch server rather than the embedded serve
 
     $ docker run -d \
       -e LOGSTASH_CONFIG_URL=<your_logstash_config_url> \
-      -p 9292:9292
-      -p 9200:9200
+      -p 9292:9292 \
+      -p 9200:9200 \
       pblittle/docker-logstash
 
 ### Finally, verify the installation
@@ -89,7 +87,7 @@ You can now verify the logstash installation by visiting the [prebuilt logstash 
 
 ## Acknowledgements
 
-Special shoutout to @ehazlett's excellent post, [Logstash and Kibana3 via Docker][4].
+Special shoutout to @ehazlett's excellent post, [logstash and Kibana via Docker][4].
 
 ## Contributing
 
@@ -104,7 +102,11 @@ Special shoutout to @ehazlett's excellent post, [Logstash and Kibana3 via Docker
 This application is distributed under the [Apache License, Version 2.0][5].
 
 [1]: https://registry.hub.docker.com/u/pblittle/docker-logstash
-[2]: https://gist.github.com/pblittle/8778567/raw/logstash.conf
+[2]: https://gist.githubusercontent.com/pblittle/8778567/raw/logstash.conf
 [3]: http://192.168.33.10:9292/index.html#/dashboard/file/logstash.json
 [4]: http://ehazlett.github.io/applications/2013/08/28/logstash-kibana/
 [5]: http://www.apache.org/licenses/LICENSE-2.0
+[6]: https://gist.githubusercontent.com/pblittle/0b937485fa4a322ea9eb/raw/logstash_linked.conf
+[7]: http://logstash.net
+[8]: http://www.elasticsearch.org/overview/elasticsearch
+[9]: http://www.elasticsearch.org/overview/kibana
