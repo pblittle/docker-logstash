@@ -7,6 +7,7 @@ set -eo pipefail
 [[ $LOGSTASH_TRACE ]] && set -x
 
 LOGSTASH_CONFIG_FILE="/opt/logstash.conf"
+KIBANA_CONFIG_FILE="/opt/logstash/vendor/kibana/config.js"
 
 # Download default conf if none present
 if [ ! -f $LOGSTASH_CONFIG_FILE ]; then
@@ -33,6 +34,18 @@ if [ ! -f $LOGSTASH_CONFIG_FILE ]; then
     sed -e "s/ES_HOST/${ES_PORT_9200_TCP_ADDR}/g" \
         -e "s/ES_PORT/${ES_PORT_9200_TCP_PORT}/g" \
         -i $LOGSTASH_CONFIG_FILE
+fi
+
+# If custom ES_HOST provided, set it in Kibana config
+if [ -n "$ES_HOST" ]; then
+  sed -e "s/window.location.hostname/\"${ES_HOST}\"/g" \
+      -i $KIBANA_CONFIG_FILE
+fi
+
+# If custom ES_PORT provided, set it in Kibana config
+if [ -n "$ES_PORT" ]; then
+  sed -e "s/9200/${ES_PORT}/g" \
+      -i $KIBANA_CONFIG_FILE
 fi
 
 # Default path for SSL certificates
