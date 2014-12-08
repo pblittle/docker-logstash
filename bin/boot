@@ -67,6 +67,13 @@ mkdir -p $SSL_CERT_PATH
 wget $LF_SSL_CERT_URL -O $LF_SSL_CERT_FILE
 wget $LF_SSL_CERT_KEY_URL -O $LF_SSL_CERT_KEY_FILE
 
+cat > elasticsearch.yml <<- EOS
+---
+
+script.disable_dynamic: true    
+
+EOS
+
 # Fire up logstash!
 exec /opt/logstash/bin/logstash \
     agent \
