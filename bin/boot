@@ -6,7 +6,8 @@ set -eo pipefail
 # Set LOGSTASH_TRACE to enable debugging
 [[ $LOGSTASH_TRACE ]] && set -x
 
-LOGSTASH_CONFIG_FILE="/opt/logstash.conf"
+LOGSTASH_CONFIG_FILE="/etc/logstash/logstash.conf"
+LOGSTASH_CONFIG_DIR=`dirname $LOGSTASH_CONFIG_FILE`
 
 # Download default conf if none present
 if [ ! -f $LOGSTASH_CONFIG_FILE ]; then
@@ -20,6 +21,7 @@ if [ ! -f $LOGSTASH_CONFIG_FILE ]; then
         LOGSTASH_CONFIG_URL="https://gist.github.com/pblittle/8778567/raw/logstash.conf"
     fi
 
+    mkdir -p $LOGSTASH_CONFIG_DIR
     echo "Downloading default configuration file ..."
     wget $LOGSTASH_CONFIG_URL -O $LOGSTASH_CONFIG_FILE
 
