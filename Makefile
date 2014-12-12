@@ -4,7 +4,7 @@ VERSION = 0.11.0
 # Set the LOGSTASH_CONFIG_URL env var to your logstash.conf file.
 # We will use our basic config if the value is empty.
 #
-LOGSTASH_CONFIG_URL ?= https://gist.github.com/pblittle/8778567/raw/logstash.conf
+LOGSTASH_CONFIG_URL ?= https://gist.githubusercontent.com/pblittle/8778567/raw/logstash.conf
 
 # This default host and port are for using the embedded elasticsearch
 # in LogStash. Set the ES_HOST and ES_PORT to use a node outside of
@@ -16,8 +16,8 @@ ES_PORT ?= 9200
 # The default logstash-forwarder keys are insecure. Please do not use in production.
 # Set the LF_SSL_CERT_KEY_URL and LF_SSL_CERT_URL env vars to use your secure keys.
 #
-LF_SSL_CERT_KEY_URL ?= https://gist.github.com/pblittle/8994708/raw/insecure-logstash-forwarder.key
-LF_SSL_CERT_URL ?= https://gist.github.com/pblittle/8994726/raw/insecure-logstash-forwarder.crt
+LF_SSL_CERT_KEY_URL ?= https://gist.githubusercontent.com/pblittle/8994708/raw/insecure-logstash-forwarder.key
+LF_SSL_CERT_URL ?= https://gist.githubusercontent.com/pblittle/8994726/raw/insecure-logstash-forwarder.crt
 
 define docker_run_flags
 -e LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL} \
