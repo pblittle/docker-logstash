@@ -21,6 +21,7 @@
 
 # Build the Elasticsearch container you are linking to
 elasticsearch: docker run -d --name elasticsearch barnybug/elasticsearch:1.1.1
+elasticsearch: docker run -d -p 9200:9200 --name elasticsearch barnybug/elasticsearch
 
 # Build the Logstash server and link to the new Elasticsearch container
-logstash: docker run -d --link elasticsearch:es -p 9292:9292 -p 9200:9200 pblittle/docker-logstash
+logstash: docker run -d --link elasticsearch:es -p 9292:9292 --expose 9200 --name logstash pblittle/docker-logstash
