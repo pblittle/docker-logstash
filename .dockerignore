@@ -1,0 +1,7 @@
+.git
+.gitignore
+LICENSE
+Makefile
+Procfile
+README.md
+Vagrantfile
