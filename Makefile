@@ -4,7 +4,7 @@ VERSION = 0.11.0
 # Set the LOGSTASH_CONFIG_URL env var to your logstash.conf file.
 # We will use our basic config if the value is empty.
 #
-LOGSTASH_CONFIG_URL ?= https://gist.githubusercontent.com/pblittle/8778567/raw/logstash.conf
+LOGSTASH_CONFIG_URL ?= https://gist.githubusercontent.com/pblittle/1b7a2f02cd16fa1c58e9/raw/logstash_nxt.conf
 
 # Set the default Elasticsearch protocol, host, and port. This will
 # replace the values in kibana config.js.
