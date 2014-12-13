@@ -6,12 +6,12 @@ VERSION = 0.11.0
 #
 LOGSTASH_CONFIG_URL ?= https://gist.githubusercontent.com/pblittle/8778567/raw/logstash.conf
 
-# This default host and port are for using the embedded elasticsearch
-# in LogStash. Set the ES_HOST and ES_PORT to use a node outside of
-# this container
+# Set the default Elasticsearch protocol, host, and port. This will
+# replace the values in kibana config.js.
 #
 ES_HOST ?= 127.0.0.1
 ES_PORT ?= 9200
+ES_PROTOCOL ?= http
 
 # The default logstash-forwarder keys are insecure. Please do not use in production.
 # Set the LF_SSL_CERT_KEY_URL and LF_SSL_CERT_URL env vars to use your secure keys.
@@ -23,6 +23,7 @@ define docker_run_flags
 -e LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL} \
 -e ES_HOST=${ES_HOST} \
 -e ES_PORT=${ES_PORT} \
+-e ES_PROTOCOL=${ES_PROTOCOL} \
 -e LF_SSL_CERT_URL=${LF_SSL_CERT_URL} \
 -e LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL} \
 -p ${ES_PORT}:${ES_PORT} \

@@ -38,3 +38,27 @@ if [[ $curl_status != 0 || $curl_check = '' ]]; then
 else
     print_pass curl_check
 fi
+
+test_kibana_es_protocol=`cat /opt/logstash/vendor/kibana/config.js | grep 'http'`
+
+if [[ $? != 0 || $? = '' ]]; then
+    print_fail $?
+else
+    print_pass $?
+fi
+
+test_kibana_es_host=`cat /opt/logstash/vendor/kibana/config.js | grep '127.0.0.1'`
+
+if [[ $? != 0 || $? = '' ]]; then
+    print_fail $?
+else
+    print_pass $?
+fi
+
+test_kibana_es_port=`cat /opt/logstash/vendor/kibana/config.js | grep '9200'`
+
+if [[ $? != 0 || $? = '' ]]; then
+    print_fail $?
+else
+    print_pass $?
+fi
