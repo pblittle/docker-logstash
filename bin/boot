@@ -6,70 +6,110 @@ set -eo pipefail
 # Set LOGSTASH_TRACE to enable debugging
 [[ $LOGSTASH_TRACE ]] && set -x
 
-LOGSTASH_CONFIG_FILE="/opt/logstash.conf"
-KIBANA_CONFIG_FILE="/opt/logstash/vendor/kibana/config.js"
+SCRIPT_ROOT=$(readlink -f "$(dirname "$0")"/..)
 
-# Download default conf if none present
-if [ ! -f $LOGSTASH_CONFIG_FILE ]; then
-    # Use the LOGSTASH_CONFIG_URL env var to download and use your
-    # logstash.conf file.
-    LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL:-}
+# If you don't provide a value for the LOGSTASH_CONFIG_URL env
+# var, your install will default to our very basic logstash.conf file.
+#
+LOGSTASH_DEFAULT_CONFIG_URL='https://gist.githubusercontent.com/pblittle/1b7a2f02cd16fa1c58e9/raw/logstash_nxt.conf'
+LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL:-${LOGSTASH_DEFAULT_CONFIG_URL}}
 
-    # If you don't provide a value for the LOGSTASH_CONFIG_URL env
-    # var, your install will default to our very basic logstash.conf file.
-    if [ -z "$LOGSTASH_CONFIG_URL" ]; then
-        LOGSTASH_CONFIG_URL="https://gist.github.com/pblittle/8778567/raw/logstash.conf"
+LOGSTASH_SRC_DIR='/opt/logstash'
+
+LOGSTASH_CONFIG_DIR='${LOGSTASH_SRC_DIR}/conf.d'
+LOGSTASH_CONFIG_FILE="${LOGSTASH_CONFIG_DIR}/logstash.conf"
+
+LOGSTASH_BINARY='${LOGSTASH_SRC_DIR}/bin/logstash'
+
+LOGSTASH_LOG_DIR='/var/log/logstash'
+LOGSTASH_LOG_FILE='${LOGSTASH_LOG_DIR}/logstash.log'
+
+KIBANA_CONFIG_FILE='${LOGSTASH_SRC_DIR}/vendor/kibana/config.js'
+
+source "${SCRIPT_ROOT}/elasticsearch.sh"
+source "${SCRIPT_ROOT}/kibana.sh"
+source "${SCRIPT_ROOT}/logstash-forwarder.sh"
+
+_es_host="$(es_host)"
+_es_port="$(es_port)"
+_es_protocol="$(es_protocol)"
+_es_embedded="$(es_embedded)"
+
+# Replace ES_HOST and ES_PORT in your logstash.conf file
+# if they exist with the IP and port dynamically generated
+# by docker.
+#
+# Note: Don't use this on a file mounting using a docker
+# volume, as the inode switch will cause `device or resource busy`
+# Instead download your file as normal
+#
+logstash_sanitize_config() {
+    local embedded=$_es_embedded
+    local host=$_es_host
+    local port=$_es_port
+    local protocol=$_es_protocol
+
+    sed -e "s/ES_EMBEDDED/${embedded}/g" \
+        -e "s/ES_PROTOCOL/${protocol}/g" \
+        -e "s/ES_HOST/${host}/g" \
+        -e "s/ES_PORT/${port}/g" \
+        -i "$LOGSTASH_CONFIG_FILE"
+}
+
+kibana_sanitize_config() {
+    local host=$_es_host
+    local port=$_es_port
+    local protocol=$_es_protocol
+
+    sed -e "s/http/${protocol}/g" \
+        -e "s/\"+window.location.hostname+\"/${host}/g" \
+        -e "s/9200/${port}/g" \
+        -i "$KIBANA_CONFIG_FILE"
+}
+
+logstash_create_config_dir() {
+    mkdir -p "${LOGSTASH_CONFIG_DIR}"
+}
+
+logstash_create_log_dir() {
+    mkdir -p "${LOGSTASH_LOG_DIR}"
+}
+
+logstash_download_config() {
+    if [ ! -f "$LOGSTASH_CONFIG_FILE" ]; then
+        wget "$LOGSTASH_CONFIG_URL" -O "$LOGSTASH_CONFIG_FILE"
     fi
+}
 
-    echo "Downloading default configuration file ..."
-    wget $LOGSTASH_CONFIG_URL -O $LOGSTASH_CONFIG_FILE
+logstash_start_agent() {
+    exec "$LOGSTASH_BINARY" \
+         agent \
+         --config $LOGSTASH_CONFIG_DIR \
+         --log $LOGSTASH_LOG_FILE \
+         -- \
+         web
+}
 
-    # This magic will replace ES_HOST and ES_PORT in your logstash.conf
-    # file if they exist with the IP and port dynamically generated
-    # by docker. Take a look at the readme for more details.
+logstash_create_config_dir
+
+logstash_create_log_dir
+
+logstash_download_config
+
+logstash_sanitize_config
+
+kibana_sanitize_config
+
+forwarder_create_ssl_dir
+
+forwarder_download_key
+
+forwarder_download_cert
+
+main() {
+    # Fire up logstash!
     #
-    # Note: Don't use this on a file mounting using a docker
-    # volume, as the inode switch will cause `device or resource busy`
-    # Instead download your file as normal
-    sed -e "s/ES_HOST/${ES_PORT_9200_TCP_ADDR}/g" \
-        -e "s/ES_PORT/${ES_PORT_9200_TCP_PORT}/g" \
-        -i $LOGSTASH_CONFIG_FILE
-fi
+    logstash_start_agent
+}
 
-# If custom ES_HOST provided, set it in Kibana config
-if [ -n "$ES_HOST" ]; then
-  sed -e "s/window.location.hostname/\"${ES_HOST}\"/g" \
-      -i $KIBANA_CONFIG_FILE
-fi
-
-# If custom ES_PORT provided, set it in Kibana config
-if [ -n "$ES_PORT" ]; then
-  sed -e "s/9200/${ES_PORT}/g" \
-      -i $KIBANA_CONFIG_FILE
-fi
-
-# Default path for SSL certificates
-SSL_CERT_PATH="/opt/ssl"
-
-# The default logstash-forwarder keys are insecure. Please do not
-# use them in production. Set the LF_SSL_CERT_KEY_URL and LF_SSL_CERT_URL
-# env vars to use your secure keys.
-LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL:-"https://gist.github.com/pblittle/8994708/raw/insecure-logstash-forwarder.key"}
-LF_SSL_CERT_URL=${LF_SSL_CERT_URL:-"https://gist.github.com/pblittle/8994726/raw/insecure-logstash-forwarder.crt"}
-
-# Your keys will be renamed to logstash-forwarder
-LF_SSL_CERT_KEY_FILE="${SSL_CERT_PATH}/logstash-forwarder.key"
-LF_SSL_CERT_FILE="${SSL_CERT_PATH}/logstash-forwarder.crt"
-
-mkdir -p $SSL_CERT_PATH
-
-# Download logstash-forwarder key and certificate
-wget $LF_SSL_CERT_URL -O $LF_SSL_CERT_FILE
-wget $LF_SSL_CERT_KEY_URL -O $LF_SSL_CERT_KEY_FILE
-
-# Fire up logstash!
-exec /opt/logstash/bin/logstash \
-    agent \
-    --config $LOGSTASH_CONFIG_FILE \
-    -- \
-    web
+main "$@"
