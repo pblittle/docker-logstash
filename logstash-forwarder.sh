@@ -18,7 +18,11 @@ LF_SSL_CERT_KEY_FILE="${LF_SSL_DIR}/logstash-forwarder.key"
 LF_SSL_CERT_FILE="${LF_SSL_DIR}/logstash-forwarder.crt"
 
 forwarder_create_ssl_dir() {
-    mkdir -p "$LF_SSL_DIR"
+    local ssl_dir="$LF_SSL_DIR"
+
+    if ! mkdir -p "${ssl_dir}" ; then
+        echo "Unable to create ${ssl_dir}" >&2
+    fi
 }
 
 forwarder_download_cert() {

@@ -35,6 +35,23 @@ _es_port="$(es_port)"
 _es_protocol="$(es_protocol)"
 _es_embedded="$(es_embedded)"
 
+logstash_create_config_dir() {
+    local config_dir="$LOGSTASH_CONFIG_DIR"
+
+    if ! mkdir -p "${config_dir}" ; then
+        echo "Unable to create ${config_dir}" >&2
+    fi
+}
+
+logstash_download_config() {
+    local config_file="$LOGSTASH_CONFIG_FILE"
+    local config_url="$LOGSTASH_CONFIG_URL"
+
+    if [ ! -f "$config_file" ]; then
+        wget "$config_url" -O "$config_file"
+    fi
+}
+
 # Replace ES_HOST and ES_PORT in your logstash.conf file
 # if they exist with the IP and port dynamically generated
 # by docker.
@@ -44,10 +61,10 @@ _es_embedded="$(es_embedded)"
 # Instead download your file as normal
 #
 logstash_sanitize_config() {
-    local embedded=$_es_embedded
-    local host=$_es_host
-    local port=$_es_port
-    local protocol=$_es_protocol
+    local embedded=$es_embedded
+    local host=$es_host
+    local port=$es_port
+    local protocol=$es_protocol
 
     sed -e "s/ES_EMBEDDED/${embedded}/g" \
         -e "s/ES_PROTOCOL/${protocol}/g" \
@@ -67,46 +84,44 @@ kibana_sanitize_config() {
         -i "$KIBANA_CONFIG_FILE"
 }
 
-logstash_create_config_dir() {
-    mkdir -p "${LOGSTASH_CONFIG_DIR}"
-}
-
 logstash_create_log_dir() {
-    mkdir -p "${LOGSTASH_LOG_DIR}"
-}
+    local log_dir="$LOGSTASH_LOG_DIR"
 
-logstash_download_config() {
-    if [ ! -f "$LOGSTASH_CONFIG_FILE" ]; then
-        wget "$LOGSTASH_CONFIG_URL" -O "$LOGSTASH_CONFIG_FILE"
+    if ! mkdir -p "${log_dir}" ; then
+        echo "Unable to create ${log_dir}" >&2
     fi
 }
 
 logstash_start_agent() {
+    local config_dir="$LOGSTASH_CONFIG_DIR"
+    local log_file="$LOGSTASH_LOG_FILE"
+
     exec "$LOGSTASH_BINARY" \
          agent \
-         --config $LOGSTASH_CONFIG_DIR \
-         --log $LOGSTASH_LOG_FILE \
+         --config "$config_dir" \
+         --log "$log_file" \
          -- \
          web
 }
 
-logstash_create_config_dir
-
-logstash_create_log_dir
-
-logstash_download_config
-
-logstash_sanitize_config
-
-kibana_sanitize_config
-
-forwarder_create_ssl_dir
-
-forwarder_download_key
-
-forwarder_download_cert
-
 main() {
+
+    logstash_create_config_dir
+
+    logstash_download_config
+
+    logstash_sanitize_config
+
+    kibana_sanitize_config
+
+    logstash_create_log_dir
+
+    forwarder_create_ssl_dir
+
+    forwarder_download_key
+
+    forwarder_download_cert
+
     # Fire up logstash!
     #
     logstash_start_agent
