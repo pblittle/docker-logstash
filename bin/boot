@@ -30,11 +30,6 @@ source "${SCRIPT_ROOT}/elasticsearch.sh"
 source "${SCRIPT_ROOT}/kibana.sh"
 source "${SCRIPT_ROOT}/logstash-forwarder.sh"
 
-_es_host="$(es_host)"
-_es_port="$(es_port)"
-_es_protocol="$(es_protocol)"
-_es_embedded="$(es_embedded)"
-
 logstash_create_config_dir() {
     local config_dir="$LOGSTASH_CONFIG_DIR"
 
@@ -61,10 +56,10 @@ logstash_download_config() {
 # Instead download your file as normal
 #
 logstash_sanitize_config() {
-    local embedded=$es_embedded
-    local host=$es_host
-    local port=$es_port
-    local protocol=$es_protocol
+    local embedded="$(es_embedded)"
+    local host="$(es_host)"
+    local port="$(es_port)"
+    local protocol="$(es_protocol)"
 
     sed -e "s/ES_EMBEDDED/${embedded}/g" \
         -e "s/ES_PROTOCOL/${protocol}/g" \
@@ -74,9 +69,9 @@ logstash_sanitize_config() {
 }
 
 kibana_sanitize_config() {
-    local host=$_es_host
-    local port=$_es_port
-    local protocol=$_es_protocol
+    local host="$(es_host)"
+    local port="$(es_port)"
+    local protocol="$(es_protocol)"
 
     sed -e "s/http/${protocol}/g" \
         -e "s/\"+window.location.hostname+\"/${host}/g" \
