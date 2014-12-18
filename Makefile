@@ -1,28 +1,29 @@
 NAME = pblittle/docker-logstash
-VERSION = 0.10.0
+VERSION = 0.11.0
 
 # Set the LOGSTASH_CONFIG_URL env var to your logstash.conf file.
 # We will use our basic config if the value is empty.
 #
-LOGSTASH_CONFIG_URL ?= https://gist.github.com/pblittle/8778567/raw/logstash.conf
+LOGSTASH_CONFIG_URL ?= https://gist.githubusercontent.com/pblittle/1b7a2f02cd16fa1c58e9/raw/logstash_nxt.conf
 
-# This default host and port are for using the embedded elasticsearch
-# in LogStash. Set the ES_HOST and ES_PORT to use a node outside of
-# this container
+# Set the default Elasticsearch protocol, host, and port. This will
+# replace the values in kibana config.js.
 #
 ES_HOST ?= 127.0.0.1
 ES_PORT ?= 9200
+ES_PROTOCOL ?= http
 
 # The default logstash-forwarder keys are insecure. Please do not use in production.
 # Set the LF_SSL_CERT_KEY_URL and LF_SSL_CERT_URL env vars to use your secure keys.
 #
-LF_SSL_CERT_KEY_URL ?= https://gist.github.com/pblittle/8994708/raw/insecure-logstash-forwarder.key
-LF_SSL_CERT_URL ?= https://gist.github.com/pblittle/8994726/raw/insecure-logstash-forwarder.crt
+LF_SSL_CERT_KEY_URL ?= https://gist.githubusercontent.com/pblittle/8994708/raw/insecure-logstash-forwarder.key
+LF_SSL_CERT_URL ?= https://gist.githubusercontent.com/pblittle/8994726/raw/insecure-logstash-forwarder.crt
 
 define docker_run_flags
 -e LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL} \
 -e ES_HOST=${ES_HOST} \
 -e ES_PORT=${ES_PORT} \
+-e ES_PROTOCOL=${ES_PROTOCOL} \
 -e LF_SSL_CERT_URL=${LF_SSL_CERT_URL} \
 -e LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL} \
 -p ${ES_PORT}:${ES_PORT} \
