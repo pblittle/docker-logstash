@@ -1,8 +1,6 @@
 NAME = pblittle/docker-logstash
 VERSION = 0.11.0
 
-LOGSTASH_VERSION ?= 1.4
-
 # Set the LOGSTASH_CONFIG_URL env var to your logstash.conf file.
 # We will use our basic config if the value is empty.
 #
@@ -38,7 +36,7 @@ endif
 
 .PHONY: build
 build:
-	docker build --rm -t $(NAME):$(VERSION) ./$(LOGSTASH_VERSION)/base
+	docker build --rm -t $(NAME):$(VERSION) ./base
 
 .PHONY: run
 run:

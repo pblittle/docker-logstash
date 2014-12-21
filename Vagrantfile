@@ -28,7 +28,7 @@ Vagrant.configure('2') do |config|
   config.vm.network :forwarded_port, guest: 9292, host: 9292
   config.vm.network :forwarded_port, guest: 9200, host: 9200
 
-  config.vm.synced_folder '.', '/vagrant'
+  config.vm.synced_folder "./#{LOGSTASH_VERSION}", '/vagrant'
 
   config.vm.provider :virtualbox do |vb|
     vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
@@ -38,5 +38,5 @@ Vagrant.configure('2') do |config|
   end
 
   config.vm.provision :shell, :inline => $provision_vagrant
-  config.vm.provision :shell, :inline => 'cd /vagrant/ && make build && make run'
+  config.vm.provision :shell, :inline => 'cd /vagrant && make build && make run'
 end
