@@ -5,7 +5,7 @@ LOGSTASH_VERSION = ENV['LOGSTASH_VERSION'] || '1.4'
 
 BOX = 'ubuntu-14.04-amd64-vbox'
 BOX_URL = "https://oss-binaries.phusionpassenger.com/vagrant/boxes/latest/#{BOX}.box"
-BOX_MEMORY = ENV['BOX_MEMORY'] || '512'
+BOX_MEMORY = ENV['BOX_MEMORY'] || '1024'
 
 MACHINE_IP = ENV['MACHINE_IP'] || '192.168.33.10'
 
