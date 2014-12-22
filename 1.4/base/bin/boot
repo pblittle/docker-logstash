@@ -30,7 +30,9 @@ source "${SCRIPT_ROOT}/elasticsearch.sh"
 source "${SCRIPT_ROOT}/kibana.sh"
 source "${SCRIPT_ROOT}/logstash-forwarder.sh"
 
-logstash_create_config_dir() {
+# Create the logstash conf dir if it doesn't already exist
+#
+function logstash_create_config_dir() {
     local config_dir="$LOGSTASH_CONFIG_DIR"
 
     if ! mkdir -p "${config_dir}" ; then
@@ -38,11 +40,14 @@ logstash_create_config_dir() {
     fi
 }
 
-logstash_download_config() {
+# Download the logstash config if the config directory is empty
+#
+function logstash_download_config() {
+    local config_dir="$LOGSTASH_CONFIG_DIR"
     local config_file="$LOGSTASH_CONFIG_FILE"
     local config_url="$LOGSTASH_CONFIG_URL"
 
-    if [ ! -f "$config_file" ]; then
+    if [ ! "$(ls -A $config_dir)" ]; then
         wget "$config_url" -O "$config_file"
     fi
 }
@@ -55,7 +60,7 @@ logstash_download_config() {
 # volume, as the inode switch will cause `device or resource busy`
 # Instead download your file as normal
 #
-logstash_sanitize_config() {
+function logstash_sanitize_config() {
     local embedded="$(es_embedded)"
     local host="$(es_host)"
     local port="$(es_port)"
@@ -68,7 +73,7 @@ logstash_sanitize_config() {
         -i "$LOGSTASH_CONFIG_FILE"
 }
 
-kibana_sanitize_config() {
+function kibana_sanitize_config() {
     local host="$(es_host)"
     local port="$(es_port)"
     local protocol="$(es_protocol)"
@@ -79,7 +84,7 @@ kibana_sanitize_config() {
         -i "$KIBANA_CONFIG_FILE"
 }
 
-logstash_create_log_dir() {
+function logstash_create_log_dir() {
     local log_dir="$LOGSTASH_LOG_DIR"
 
     if ! mkdir -p "${log_dir}" ; then
@@ -87,7 +92,7 @@ logstash_create_log_dir() {
     fi
 }
 
-logstash_start_agent() {
+function logstash_start_agent() {
     local config_dir="$LOGSTASH_CONFIG_DIR"
     local log_file="$LOGSTASH_LOG_FILE"
 
@@ -99,7 +104,7 @@ logstash_start_agent() {
          web
 }
 
-main() {
+function main() {
 
     logstash_create_config_dir
 

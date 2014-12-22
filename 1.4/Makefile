@@ -36,7 +36,7 @@ endif
 
 .PHONY: build
 build:
-	docker build --rm -t $(NAME):$(VERSION) .
+	docker build --rm -t $(NAME):$(VERSION) ./base
 
 .PHONY: run
 run:
@@ -48,7 +48,7 @@ shell:
 
 .PHONY: test
 test:
-	/bin/bash tests/logstash.sh
+	/bin/bash ./tests/logstash.sh
 
 .PHONY: tag
 tag:
