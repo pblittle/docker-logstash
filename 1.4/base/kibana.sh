@@ -6,7 +6,7 @@ set -e -o pipefail
 # Set LOGSTASH_TRACE to enable debugging
 [[ $LOGSTASH_TRACE ]] && set -x
 
-kibana_port() {
+function kibana_port() {
     local default_port=${KIBANA_PORT_9292_TCP_PORT:-9292}
     local port=${KIBANA_PORT:-$default_port}
 

@@ -17,7 +17,7 @@ LF_SSL_CERT_URL=${LF_SSL_CERT_URL:-"https://gist.githubusercontent.com/pblittle/
 LF_SSL_CERT_KEY_FILE="${LF_SSL_DIR}/logstash-forwarder.key"
 LF_SSL_CERT_FILE="${LF_SSL_DIR}/logstash-forwarder.crt"
 
-forwarder_create_ssl_dir() {
+function forwarder_create_ssl_dir() {
     local ssl_dir="$LF_SSL_DIR"
 
     if ! mkdir -p "${ssl_dir}" ; then
@@ -25,10 +25,10 @@ forwarder_create_ssl_dir() {
     fi
 }
 
-forwarder_download_cert() {
+function forwarder_download_cert() {
     wget "$LF_SSL_CERT_URL" -O "$LF_SSL_CERT_FILE"
 }
 
-forwarder_download_key() {
+function forwarder_download_key() {
     wget "$LF_SSL_CERT_KEY_URL" -O "$LF_SSL_CERT_KEY_FILE"
 }
