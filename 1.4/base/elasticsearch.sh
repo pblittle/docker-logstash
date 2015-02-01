@@ -6,6 +6,8 @@ set -e -o pipefail
 # Set LOGSTASH_TRACE to enable debugging
 [[ $LOGSTASH_TRACE ]] && set -x
 
+ES_CONFIG_FILE="${SCRIPT_ROOT}/elasticsearch.json"
+
 function es_host() {
     local default_host=${ES_PORT_9200_TCP_ADDR:-127.0.0.1}
     local host=${ES_HOST:-$default_host}
@@ -35,6 +37,17 @@ function es_embedded() {
     fi
 
     echo "$embedded"
+}
+
+function es_script_disable_dynamic() {
+    local config_file="$ES_CONFIG_FILE"
+
+    if [ ! -f "$config_file" ]; then
+        cat > "$config_file" << EOF
+---
+script.disable_dynamic: true
+EOF
+    fi
 }
 
 if [[ -z "$(es_host)" ]]; then

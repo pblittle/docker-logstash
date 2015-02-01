@@ -62,3 +62,11 @@ if [[ $? != 0 || $? = '' ]]; then
 else
     print_pass $?
 fi
+
+test_elasticsearch_config=`cat /opt/logstash/elasticsearch.yml | grep 'script.disable_dynamic: true'`
+
+if [[ $? != 0 || $? = '' ]]; then
+    print_fail $?
+else
+    print_pass $?
+fi

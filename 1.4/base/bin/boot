@@ -114,6 +114,8 @@ function main() {
 
     kibana_sanitize_config
 
+    es_script_disable_dynamic
+
     logstash_create_log_dir
 
     forwarder_create_ssl_dir
