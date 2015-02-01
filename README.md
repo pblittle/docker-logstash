@@ -27,6 +27,14 @@ To use your own config file, set the `LOGSTASH_CONFIG_URL` environment variable 
       -p 9200:9200 \
       pblittle/docker-logstash
 
+To use config files from the local file system, mount the directory as a volume using the `-v` flag. Any file in `/opt/logstash/conf.d` in the container will get loaded by logstash.
+
+    $ docker run -d \
+      -v <your_logstash_config_dir>:/opt/logstash/conf.d \
+      -p 9292:9292 \
+      -p 9200:9200 \
+      pblittle/docker-logstash
+
 ### Linked container running Elasticsearch
 
 If you want to link to container running Elasticsearch rather than use the embedded Elasticsearch server:
