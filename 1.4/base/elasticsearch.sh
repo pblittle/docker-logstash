@@ -6,7 +6,7 @@ set -e -o pipefail
 # Set LOGSTASH_TRACE to enable debugging
 [[ $LOGSTASH_TRACE ]] && set -x
 
-ES_CONFIG_FILE="${SCRIPT_ROOT}/elasticsearch.json"
+ES_CONFIG_FILE="${SCRIPT_ROOT}/elasticsearch.yml"
 
 function es_host() {
     local default_host=${ES_PORT_9200_TCP_ADDR:-127.0.0.1}
