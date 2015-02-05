@@ -38,5 +38,4 @@ Vagrant.configure('2') do |config|
   end
 
   config.vm.provision :shell, :inline => $provision_vagrant
-  config.vm.provision :shell, :inline => 'cd /vagrant && make build && make run'
 end
