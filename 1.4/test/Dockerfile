@@ -13,3 +13,5 @@ RUN apt-get update \
 
 WORKDIR /app
 ADD test.sh /app/
+
+CMD [ "/app", "test.sh" ]

@@ -12,31 +12,28 @@ function print_fail()
     echo "Fail: ${1}"
 }
 
-port_check=$(netstat -an | grep ':9292\|:9200')
-port_status=$?
+port_check=$(netstat -an | grep '\:9292\|\:9200')
 
-if [[ $port_status != 0 || $port_check = '' ]]; then
-    print_fail "$port_check"
+if [[ $? != 0 || $? = '' ]]; then
+    print_fail $?
 else
-    print_pass "$port_check"
+    print_pass $?
 fi
 
 process_check=$(pgrep -f logstash)
-process_status=$?
 
-if [[ $process_status != 0 || $process_check = '' ]]; then
-    print_fail "$process_check"
+if [[ $? != 0 || $? = '' ]]; then
+    print_fail $?
 else
-    print_pass "$process_check"
+    print_pass $?
 fi
 
 curl_check=$(curl -s -S localhost:9200/_nodes?pretty=true)
-curl_status=$?
 
-if [[ $curl_status != 0 || $curl_check = '' ]]; then
-    print_fail "$curl_check"
+if [[ $? != 0 || $? = '' ]]; then
+    print_fail $?
 else
-    print_pass "$curl_check"
+    print_pass $?
 fi
 
 test_kibana_es_protocol=$(grep 'http' /opt/logstash/vendor/kibana/config.js)
