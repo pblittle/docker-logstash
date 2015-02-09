@@ -1,1 +1,0 @@
-FROM pblittle/docker-logstash
