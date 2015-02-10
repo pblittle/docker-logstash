@@ -1,3 +1,5 @@
+> Note: This release stores logstash config files in `/opt/logstash/conf.d/`. Please update any references to `/opt/logstash.conf` in your existing deployment configs. `/opt/logstash/conf.d/` will be used from this release, `0.11.0`, forward.
+
 # Logstash Dockerfile
 
 This is a highly configurable [logstash][7] (1.4.2) image running [Elasticsearch][8] (1.1.1) and [Kibana][9] (3.0.1).
@@ -27,6 +29,14 @@ To use your own config file, set the `LOGSTASH_CONFIG_URL` environment variable 
       -p 9200:9200 \
       pblittle/docker-logstash
 
+To use config files from the local file system, mount the directory as a volume using the `-v` flag. Any file in `/opt/logstash/conf.d` in the container will get loaded by logstash.
+
+    $ docker run -d \
+      -v <your_logstash_config_dir>:/opt/logstash/conf.d \
+      -p 9292:9292 \
+      -p 9200:9200 \
+      pblittle/docker-logstash
+
 ### Linked container running Elasticsearch
 
 If you want to link to container running Elasticsearch rather than use the embedded Elasticsearch server:
@@ -35,7 +45,6 @@ If you want to link to container running Elasticsearch rather than use the embed
       -e LOGSTASH_CONFIG_URL=<your_logstash_config_url> \
       --link <your_es_container_name>:es \
       -p 9292:9292 \
-      -p 9200:9200 \
       pblittle/docker-logstash
 
 To have the linked Elasticsearch container's `bind_host` and `port` automatically detected, you will need to create an `ES_HOST` and `ES_PORT` placeholder in the `elasticsearch` definition in your logstash config file. For example:
@@ -56,7 +65,6 @@ If you are using an external Elasticsearch server rather than the embedded serve
     $ docker run -d \
       -e LOGSTASH_CONFIG_URL=<your_logstash_config_url> \
       -p 9292:9292 \
-      -p 9200:9200 \
       pblittle/docker-logstash
 
 ### Finally, verify the installation
@@ -72,7 +80,7 @@ If you prefer to build from source rather than use the [pblittle/docker-logstash
     $ git clone https://github.com/pblittle/docker-logstash.git
     $ cd docker-logstash
 
-If you are using Vagrant, start and provision a virtual machine using the provided Vagrantfile:
+If you are using Vagrant, you can build and run the container in a VM by executing:
 
     $ vagrant up
     $ vagrant ssh
@@ -83,7 +91,7 @@ From there, build and run a container using the newly created virtual machine:
     $ make build
     $ make <options> run
 
-You can now verify the logstash installation by visiting the [prebuilt logstash dashboard][3] running in the newly created container.
+Verify the logstash installation by visiting the [prebuilt logstash dashboard][3] running in the newly created container.
 
 ## Acknowledgements
 

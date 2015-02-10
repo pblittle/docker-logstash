@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+LOGSTASH_VERSION = ENV['LOGSTASH_VERSION'] || '1.4'
+
 BOX = 'ubuntu-14.04-amd64-vbox'
 BOX_URL = "https://oss-binaries.phusionpassenger.com/vagrant/boxes/latest/#{BOX}.box"
 BOX_MEMORY = ENV['BOX_MEMORY'] || '1024'
@@ -24,8 +26,9 @@ Vagrant.configure('2') do |config|
 
   config.vm.network :private_network, ip: MACHINE_IP
   config.vm.network :forwarded_port, guest: 9292, host: 9292
+  config.vm.network :forwarded_port, guest: 9200, host: 9200
 
-  config.vm.synced_folder './', '/vagrant'
+  config.vm.synced_folder "./#{LOGSTASH_VERSION}", '/vagrant'
 
   config.vm.provider :virtualbox do |vb|
     vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
