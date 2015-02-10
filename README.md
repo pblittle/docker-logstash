@@ -1,3 +1,5 @@
+> Note: This release stores logstash config files in `/opt/logstash/conf.d/`. Please update any references to `/opt/logstash.conf` in your existing deployment configs. `/opt/logstash/conf.d/` will be used from this release, `0.11.0`, forward.
+
 # Logstash Dockerfile
 
 This is a highly configurable [logstash][7] (1.4.2) image running [Elasticsearch][8] (1.1.1) and [Kibana][9] (3.0.1).
