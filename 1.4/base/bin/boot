@@ -16,6 +16,9 @@ LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL:-${LOGSTASH_DEFAULT_CONFIG_URL}}
 
 LOGSTASH_SRC_DIR='/opt/logstash'
 
+LOGSTASH_PATTERNS_URL=${LOGSTASH_PATTERNS_URL:-''}
+LOGSTASH_PATTERNS_DIR="${LOGSTASH_SRC_DIR}/patterns"
+
 LOGSTASH_CONFIG_DIR="${LOGSTASH_SRC_DIR}/conf.d"
 LOGSTASH_CONFIG_FILE="${LOGSTASH_CONFIG_DIR}/logstash.conf"
 
@@ -47,6 +50,17 @@ function logstash_download_config() {
 
     if [ ! "$(ls -A $config_dir)" ]; then
         wget "$config_url" -O "$config_file"
+    fi
+}
+
+# Download a patterns file if user defined ENV
+#
+function logstash_download_pattern() {
+    local pattern_file="$LOGSTASH_PATTERNS_DIR/custom"
+    local pattern_url="$LOGSTASH_PATTERNS_URL"
+
+    if [ ! -z $pattern_url ]; then
+        wget "$pattern_url" -O "$pattern_file"
     fi
 }
 
@@ -94,6 +108,8 @@ function main() {
     logstash_create_config_dir
 
     logstash_download_config
+
+    logstash_download_pattern
 
     logstash_sanitize_config
 
