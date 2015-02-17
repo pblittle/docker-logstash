@@ -22,13 +22,6 @@ function es_port() {
     echo "$port"
 }
 
-function es_protocol() {
-    local default_protocol='http'
-    local protocol=${ES_PROTOCOL:-$default_protocol}
-
-    echo "$protocol"
-}
-
 function es_embedded() {
     local embedded=false
 
@@ -51,16 +44,16 @@ EOF
 }
 
 if [[ -z "$(es_host)" ]]; then
-    echo "An elasticsearch host is required." >&2
+    echo "An elasticsearch host string is required." >&2
     exit 1
 fi
 
 if [[ -z "$(es_port)" ]]; then
-    echo "An elasticsearch port is required." >&2
+    echo "An elasticsearch port string is required." >&2
     exit 1
 fi
 
-if [[ -z "$(es_protocol)" ]]; then
-    echo "An elasticsearch protocol is required." >&2
+if [[ -z "$(es_embedded)" ]]; then
+    echo "An elasticsearch embedded boolean is required." >&2
     exit 1
 fi

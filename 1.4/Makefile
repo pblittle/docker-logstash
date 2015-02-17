@@ -1,15 +1,16 @@
 NAME = pblittle/docker-logstash
-VERSION = 0.11.0
+VERSION = 0.11.1
 
 # Set the LOGSTASH_CONFIG_URL env var to your logstash.conf file.
 # We will use our basic config if the value is empty.
 #
-LOGSTASH_CONFIG_URL ?= https://gist.githubusercontent.com/pblittle/1b7a2f02cd16fa1c58e9/raw/logstash_nxt.conf
+LOGSTASH_CONFIG_URL ?= https://gist.githubusercontent.com/pblittle/8778567/raw/logstash.conf
 
 # Set the default Elasticsearch protocol, host, and port. This will
-# replace the values in kibana config.js.
+# replace the ES_HOST and ES_PORT values in the logstash config.
+# It will also replace ES_HOST, ES_PORT, and ES_PROTOCOL in kibana config.js.
 #
-ES_HOST ?= 127.0.0.1
+ES_HOST ?=
 ES_PORT ?= 9200
 ES_PROTOCOL ?= http
 
@@ -26,12 +27,15 @@ define docker_run_flags
 -e ES_PROTOCOL=${ES_PROTOCOL} \
 -e LF_SSL_CERT_URL=${LF_SSL_CERT_URL} \
 -e LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL} \
--p ${ES_PORT}:${ES_PORT} \
 -p 9292:9292
 endef
 
 ifdef ES_CONTAINER
 	docker_run_flags += --link $(ES_CONTAINER):es
+endif
+
+ifdef ES_PORT
+	docker_run_flags += -p $(ES_PORT):$(ES_PORT)
 endif
 
 .PHONY: build
@@ -40,7 +44,7 @@ build:
 
 .PHONY: run
 run:
-	docker run -d $(docker_run_flags) --name logstash $(NAME):$(VERSION)
+	docker run -d --name logstash $(docker_run_flags) $(NAME):$(VERSION)
 
 .PHONY: shell
 shell:
@@ -49,7 +53,11 @@ shell:
 .PHONY: test
 test:
 	docker build --rm -t $(NAME):$(VERSION) ./test
-	docker run -d $(docker_run_flags) --name logstash-test $(NAME):$(VERSION)
+	docker run -d --name logstash-test $(docker_run_flags) $(NAME):$(VERSION)
+
+.PHONY: test-shell
+test-shell:
+	docker exec -ti logstash-test /bin/bash
 
 .PHONY: tag
 tag:

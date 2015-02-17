@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eo pipefail
+[[ $LOGSTASH_TRACE ]] && set -x
 
 function print_pass()
 {
@@ -12,58 +12,98 @@ function print_fail()
     echo "Fail: ${1}"
 }
 
-port_check=$(netstat -an | grep '\:9292\|\:9200')
+function logstash_process_check() {
+    local check=$(pgrep -f logstash)
+    local status=$?
 
-if [[ $? != 0 || $? = '' ]]; then
-    print_fail $?
-else
-    print_pass $?
-fi
+    if [[ $status != 0 || $check = '' ]]; then
+        print_fail $?
+    else
+        print_pass $?
+    fi
+}
 
-process_check=$(pgrep -f logstash)
+function es_embedded_check() {
+    local check=$(grep 'embedded => true' /opt/logstash/conf.d/logstash.conf)
+    local status=$?
 
-if [[ $? != 0 || $? = '' ]]; then
-    print_fail $?
-else
-    print_pass $?
-fi
+    if [[ $status != 0 || $check = '' ]]; then
+        print_fail $?
+    else
+        print_pass $?
+    fi
+}
 
-curl_check=$(curl -s -S localhost:9200/_nodes?pretty=true)
+function es_curl_check() {
+    local check=$(curl -s -S localhost:9200/_nodes?pretty=true)
+    local status=$?
 
-if [[ $? != 0 || $? = '' ]]; then
-    print_fail $?
-else
-    print_pass $?
-fi
+    if [[ $status != 0 || $check = '' ]]; then
+        print_fail $?
+    else
+        print_pass $?
+    fi
+}
 
-test_kibana_es_protocol=$(grep 'http' /opt/logstash/vendor/kibana/config.js)
+function es_disable_dynamic_check() {
+    local check=$(grep 'script.disable_dynamic: true' /app/elasticsearch.yml)
+    local status=$?
 
-if [[ $? != 0 || $? = '' ]]; then
-    print_fail $?
-else
-    print_pass $?
-fi
+    if [[ $status != 0 || $check = '' ]]; then
+        print_fail $?
+    else
+        print_pass $?
+    fi
+}
 
-test_kibana_es_host=$(grep '127.0.0.1' /opt/logstash/vendor/kibana/config.js)
+function es_port_check() {
+    local check=$(netstat -an | grep '\:9200')
+    local status=$?
 
-if [[ $? != 0 || $? = '' ]]; then
-    print_fail $?
-else
-    print_pass $?
-fi
+    if [[ $status != 0 || $check = '' ]]; then
+        print_fail $?
+    else
+        print_pass $?
+    fi
+}
 
-test_kibana_es_port=$(grep '9200' /opt/logstash/vendor/kibana/config.js)
+function kibana_port_check() {
+    local check=$(netstat -an | grep '\:9292')
+    local status=$?
 
-if [[ $? != 0 || $? = '' ]]; then
-    print_fail $?
-else
-    print_pass $?
-fi
+    if [[ $status != 0 || $check = '' ]]; then
+        print_fail $?
+    else
+        print_pass $?
+    fi
+}
 
-test_elasticsearch_config=$(grep 'script.disable_dynamic: true' /app/elasticsearch.yml)
+function kibana_es_server_check() {
+    local server='http://"+window.location.hostname+":9200'
+    local check=$(grep ${server} /opt/logstash/vendor/kibana/config.js)
+    local status=$?
 
-if [[ $? != 0 || $? = '' ]]; then
-    print_fail $?
-else
-    print_pass $?
-fi
+    if [[ $status != 0 || $check = '' ]]; then
+        print_fail $?
+    else
+        print_pass $?
+    fi
+}
+
+function main() {
+    logstash_process_check
+
+    es_curl_check
+
+    es_embedded_check
+
+    es_disable_dynamic_check
+
+    es_port_check
+
+    kibana_port_check
+
+    kibana_es_server_check
+}
+
+main "$@"
