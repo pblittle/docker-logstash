@@ -102,6 +102,7 @@ function main() {
     es_script_disable_dynamic
 
     logstash_create_log_dir
+    elasticsearch_disable_dynamic
 
     forwarder_create_ssl_dir
 

@@ -32,7 +32,7 @@ function es_embedded() {
     echo "$embedded"
 }
 
-function es_script_disable_dynamic() {
+function elasticsearch_disable_dynamic() {
     local config_file="$ES_CONFIG_FILE"
 
     if [ ! -f "$config_file" ]; then
