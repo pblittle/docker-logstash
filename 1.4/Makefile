@@ -38,6 +38,9 @@ ifdef ES_PORT
 	docker_run_flags += -p $(ES_PORT):$(ES_PORT)
 endif
 
+.PHONY: default
+default: build run
+
 .PHONY: build
 build:
 	docker build --rm -t $(NAME):$(VERSION) ./base
