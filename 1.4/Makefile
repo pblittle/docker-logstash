@@ -54,9 +54,9 @@ shell:
 	docker exec -ti logstash /bin/bash
 
 .PHONY: test
-test:
+test: build
 	docker build --rm -t $(NAME):$(VERSION) ./test
-	docker run -d --name logstash-test $(docker_run_flags) $(NAME):$(VERSION)
+	docker run -d --name logstash-test -p 9292:9292 -p 9200:9200 $(NAME):$(VERSION)
 
 .PHONY: test-shell
 test-shell:
