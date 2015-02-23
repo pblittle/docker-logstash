@@ -53,10 +53,14 @@ run:
 shell:
 	docker exec -ti logstash /bin/bash
 
+.PHONY: test-prepare
+test-prepare: build
+	docker build --rm -t $(NAME)-test:$(VERSION) ./test
+	docker run -d --name logstash-test -p 9292:9292 -p 9200:9200 $(NAME)-test:$(VERSION)
+
 .PHONY: test
-test: build
-	docker build --rm -t $(NAME):$(VERSION) ./test
-	docker run -d --name logstash-test -p 9292:9292 -p 9200:9200 $(NAME):$(VERSION)
+test:
+	docker exec -ti logstash-test /usr/local/bin/bats /app/test/embedded.bats
 
 .PHONY: test-shell
 test-shell:

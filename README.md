@@ -72,11 +72,11 @@ If you prefer to build from source rather than use the [pblittle/docker-logstash
     $ git clone https://github.com/pblittle/docker-logstash.git
     $ cd docker-logstash
 
-If you are using [Vagrant][3], you can build and run the container in a VM by executing:
-
-    $ vagrant up
-    $ vagrant ssh
-    $ cd /vagrant/1.4
+> If you are using [Vagrant][3], you can build and run the container in a VM by executing:
+>
+>     $ vagrant up
+>     $ vagrant ssh
+>     $ cd /vagrant/1.4
 
 From there, build and run a container using the newly created virtual machine:
 
