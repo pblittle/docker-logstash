@@ -39,15 +39,14 @@ To use config files from the local file system, mount the directory as a volume 
 
 ### Linked container running Elasticsearch
 
-If you want to link to container running Elasticsearch rather than use the embedded Elasticsearch server:
+If you want to link to a container running Elasticsearch rather than use the embedded Elasticsearch server:
 
     $ docker run -d \
-      -e LOGSTASH_CONFIG_URL=<your_logstash_config_url> \
       --link <your_es_container_name>:es \
       -p 9292:9292 \
       pblittle/docker-logstash
 
-To have the linked Elasticsearch container's `bind_host` and `port` automatically detected, you will need to create an `ES_HOST` and `ES_PORT` placeholder in the `elasticsearch` definition in your logstash config file. For example:
+To have the linked Elasticsearch container's `bind_host` and `port` automatically detected, you will need to set the `bind_host` and `port` to `ES_HOST` and `ES_PORT` respecively in your logstash config file. For example:
 
     output {
       elasticsearch {
@@ -56,22 +55,15 @@ To have the linked Elasticsearch container's `bind_host` and `port` automaticall
       }
     }
 
-I have created an example [logstash_linked.conf][6] which includes the `ES_HOST` and `ES_PORT` placeholders to serve as an example.
-
 ### External Elasticsearch server
 
-If you are using an external Elasticsearch server rather than the embedded server or a linked container, simply provide a configuration file with the Elasticsearch endpoints already configured:
+If you are using an external Elasticsearch server, simply set the `ES_HOST` and `ES_PORT` environment variables in your `run` command:
 
     $ docker run -d \
-      -e LOGSTASH_CONFIG_URL=<your_logstash_config_url> \
+      -e ES_HOST=<your_es_container_host> \
+      -e ES_PORT=<your_es_container_port> \
       -p 9292:9292 \
       pblittle/docker-logstash
-
-### Finally, verify the installation
-
-You can now verify the logstash installation by visiting the prebuilt logstash dashboard:
-
-    http://<your_container_ip>:9292/index.html#/dashboard/file/logstash.json
 
 ## Optional, build and run the image from source
 
@@ -80,18 +72,21 @@ If you prefer to build from source rather than use the [pblittle/docker-logstash
     $ git clone https://github.com/pblittle/docker-logstash.git
     $ cd docker-logstash
 
-If you are using Vagrant, you can build and run the container in a VM by executing:
-
-    $ vagrant up
-    $ vagrant ssh
-    $ cd /vagrant
+> If you are using [Vagrant][3], you can build and run the container in a VM by executing:
+>
+>     $ vagrant up
+>     $ vagrant ssh
+>     $ cd /vagrant/1.4
 
 From there, build and run a container using the newly created virtual machine:
 
-    $ make build
-    $ make <options> run
+    $ make
 
-Verify the logstash installation by visiting the [prebuilt logstash dashboard][3] running in the newly created container.
+### Finally, verify the installation
+
+You can now verify the logstash installation by visiting the Kibana dashboard:
+
+    http://<your_container_ip>:9292/index.html#/dashboard/file/logstash.json
 
 ## Acknowledgements
 
@@ -100,10 +95,11 @@ Special shoutout to @ehazlett's excellent post, [logstash and Kibana via Docker]
 ## Contributing
 
 1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+2. Checkout the develop branch (`git checkout -b develop`)
+3. Create your feature branch (`git checkout -b my-new-feature`)
+4. Commit your changes (`git commit -am 'Add some feature'`)
+5. Push to the branch (`git push origin my-new-feature`)
+6. Create new Pull Request
 
 ## License
 
@@ -111,10 +107,9 @@ This application is distributed under the [Apache License, Version 2.0][5].
 
 [1]: https://registry.hub.docker.com/u/pblittle/docker-logstash
 [2]: https://gist.githubusercontent.com/pblittle/8778567/raw/logstash.conf
-[3]: http://192.168.33.10:9292/index.html#/dashboard/file/logstash.json
+[3]: https://www.vagrantup.com
 [4]: http://ehazlett.github.io/applications/2013/08/28/logstash-kibana/
 [5]: http://www.apache.org/licenses/LICENSE-2.0
-[6]: https://gist.githubusercontent.com/pblittle/0b937485fa4a322ea9eb/raw/logstash_linked.conf
 [7]: http://logstash.net
 [8]: http://www.elasticsearch.org/overview/elasticsearch
 [9]: http://www.elasticsearch.org/overview/kibana

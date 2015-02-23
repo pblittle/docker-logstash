@@ -1,5 +1,5 @@
 NAME = pblittle/docker-logstash
-VERSION = 0.11.1
+VERSION = 0.12.0
 
 # Set the LOGSTASH_CONFIG_URL env var to your logstash.conf file.
 # We will use our basic config if the value is empty.
@@ -38,6 +38,9 @@ ifdef ES_PORT
 	docker_run_flags += -p $(ES_PORT):$(ES_PORT)
 endif
 
+.PHONY: default
+default: build run
+
 .PHONY: build
 build:
 	docker build --rm -t $(NAME):$(VERSION) ./base
@@ -50,10 +53,14 @@ run:
 shell:
 	docker exec -ti logstash /bin/bash
 
+.PHONY: test-prepare
+test-prepare: build
+	docker build --rm -t $(NAME)-test:$(VERSION) ./test
+	docker run -d --name logstash-test -p 9292:9292 -p 9200:9200 $(NAME)-test:$(VERSION)
+
 .PHONY: test
 test:
-	docker build --rm -t $(NAME):$(VERSION) ./test
-	docker run -d --name logstash-test $(docker_run_flags) $(NAME):$(VERSION)
+	docker exec -ti logstash-test /usr/local/bin/bats /app/test/embedded.bats
 
 .PHONY: test-shell
 test-shell:
