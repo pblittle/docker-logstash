@@ -1,5 +1,6 @@
 NAME = pblittle/docker-logstash
 VERSION = 0.12.0
+VERSION = 0.12.1-dev
 
 # Set the LOGSTASH_CONFIG_URL env var to your logstash.conf file.
 # We will use our basic config if the value is empty.
