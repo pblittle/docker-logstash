@@ -1,0 +1,16 @@
+---
+elasticsearch:
+  image: dockerfile/elasticsearch
+  ports:
+    - '9200:9200'
+    - '9300:9300'
+  command: '/elasticsearch/bin/elasticsearch -Des.http.cors.enabled=true'
+
+logstash:
+  build: .
+  ports:
+   - '9292:9292'
+  links:
+    - elasticsearch:es
+  environment:
+    LOGSTASH_TRACE: true
