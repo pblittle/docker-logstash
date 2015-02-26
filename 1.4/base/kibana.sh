@@ -20,16 +20,16 @@ function es_proxy_port() {
     echo "$port"
 }
 
-function kibana_es_protocol() {
-    local protocol=${ES_PROTOCOL:-'http'}
+function es_proxy_protocol() {
+    local protocol=${ES_PROXY_PROTOCOL:-'http'}
 
     echo "$protocol"
 }
 
 function kibana_sanitize_config() {
-    local protocol="$(kibana_es_protocol)"
     local host="$(es_proxy_host)"
     local port="$(es_proxy_port)"
+    local protocol="$(es_proxy_protocol)"
 
     sed -e "s|http|${protocol}|g" \
         -e "s|\"+window.location.hostname+\"|${host}|g" \
@@ -47,7 +47,7 @@ if [[ -z "$(es_proxy_port)" ]]; then
     exit 1
 fi
 
-if [[ -z "$(kibana_es_protocol)" ]]; then
-    echo "An elasticsearch protocol is required." >&2
+if [[ -z "$(es_proxy_protocol)" ]]; then
+    echo "An Elasticsearch proxy protocol is required." >&2
     exit 1
 fi

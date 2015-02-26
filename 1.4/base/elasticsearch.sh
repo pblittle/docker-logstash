@@ -62,6 +62,6 @@ if [[ -z "$(es_service_port)" ]]; then
 fi
 
 if [[ -z "$(es_embedded)" ]]; then
-    echo "An elasticsearch embedded boolean is required." >&2
+    echo "An Elasticsearch embedded boolean value is required." >&2
     exit 1
 fi

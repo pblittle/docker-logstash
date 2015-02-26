@@ -9,7 +9,6 @@ LOGSTASH_CONFIG_URL ?= https://gist.githubusercontent.com/pblittle/8778567/raw/l
 # Set the default Elasticsearch host and port. This will replace the ES_HOST
 # and ES_PORT values in your logstash config.
 #
-ES_PROTOCOL ?= http
 ES_SERVICE_HOST ?=
 ES_SERVICE_PORT ?= 9200
 
@@ -19,6 +18,8 @@ ES_SERVICE_PORT ?= 9200
 #
 ES_PROXY_HOST ?=
 ES_PROXY_PORT ?= 9292
+ES_PROXY_PROTOCOL ?=
+
 # The default logstash-forwarder keys are insecure. Please do not use in production.
 # Set the LF_SSL_CERT_KEY_URL and LF_SSL_CERT_URL env vars to use your secure keys.
 #
@@ -27,14 +28,16 @@ LF_SSL_CERT_URL ?= https://gist.githubusercontent.com/pblittle/8994726/raw/insec
 
 define docker_run_flags
 -e LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL} \
--e ES_PROTOCOL=${ES_PROTOCOL} \
 -e ES_SERVICE_HOST=${ES_SERVICE_HOST} \
 -e ES_PROXY_HOST=${ES_PROXY_HOST} \
+-e ES_PROXY_PROTOCOL=${ES_PROXY_PROTOCOL} \
 -e LF_SSL_CERT_URL=${LF_SSL_CERT_URL} \
--e LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL} \
--p 9292:9292
+-e LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL}
 endef
 
+# This is not implemented yet. It will enable a custom link name when building
+# from this Makefile. Bug me if you want it. :)
+#
 ifdef ES_CONTAINER
 	docker_run_flags += --link $(ES_CONTAINER):es
 endif
