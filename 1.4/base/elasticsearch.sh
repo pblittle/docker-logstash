@@ -8,16 +8,24 @@ set -e -o pipefail
 
 ES_CONFIG_FILE="${SCRIPT_ROOT}/elasticsearch.yml"
 
-function es_host() {
-    local default_host=${ES_PORT_9200_TCP_ADDR:-127.0.0.1}
-    local host=${ES_HOST:-$default_host}
+# If there is a linked Elasticsearch container, use it's host.
+# If there isn't a link, use ES_SERVICE_HOST if it is defined.
+# Otherwise fall back to 127.0.0.1.
+#
+function es_service_host() {
+    local default_host=${ES_SERVICE_HOST:-127.0.0.1}
+    local host=${ES_PORT_9200_TCP_ADDR:-$default_host}
 
     echo "$host"
 }
 
-function es_port() {
-    local default_port=${ES_PORT_9200_TCP_PORT:-9200}
-    local port=${ES_PORT:-$default_port}
+# If there is a linked Elasticsearch container, use it's port.
+# If there isn't a link, use ES_SERVICE_PORT if it is defined.
+# Otherwise fall back to 9200.
+#
+function es_service_port() {
+    local default_port=${ES_SERVICE_PORT:-9200}
+    local port=${ES_PORT_9200_TCP_PORT:-$default_port}
 
     echo "$port"
 }
@@ -25,7 +33,7 @@ function es_port() {
 function es_embedded() {
     local embedded=false
 
-    if [ "$(es_host)" = "127.0.0.1" ] ; then
+    if [ "$(es_service_host)" = "127.0.0.1" ] ; then
         embedded=true
     fi
 
@@ -43,13 +51,13 @@ EOF
     fi
 }
 
-if [[ -z "$(es_host)" ]]; then
-    echo "An elasticsearch host string is required." >&2
+if [[ -z "$(es_service_host)" ]]; then
+    echo "An Elasticsearch service host string is required." >&2
     exit 1
 fi
 
-if [[ -z "$(es_port)" ]]; then
-    echo "An elasticsearch port string is required." >&2
+if [[ -z "$(es_service_port)" ]]; then
+    echo "An Elasticsearch service port string is required." >&2
     exit 1
 fi
 

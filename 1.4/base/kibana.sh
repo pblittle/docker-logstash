@@ -8,14 +8,14 @@ set -e -o pipefail
 
 KIBANA_CONFIG_FILE="${LOGSTASH_SRC_DIR}/vendor/kibana/config.js"
 
-function kibana_es_host() {
-    local host=${ES_HOST:='"+window.location.hostname+"'}
+function es_proxy_host() {
+    local host=${ES_PROXY_HOST:-'"+window.location.hostname+"'}
 
     echo "$host"
 }
 
-function kibana_es_port() {
-    local port=${ES_PORT:-9200}
+function es_proxy_port() {
+    local port=${ES_PROXY_PORT:-9200}
 
     echo "$port"
 }
@@ -27,9 +27,9 @@ function kibana_es_protocol() {
 }
 
 function kibana_sanitize_config() {
-    local host="$(kibana_es_host)"
-    local port="$(kibana_es_port)"
     local protocol="$(kibana_es_protocol)"
+    local host="$(es_proxy_host)"
+    local port="$(es_proxy_port)"
 
     sed -e "s|http|${protocol}|g" \
         -e "s|\"+window.location.hostname+\"|${host}|g" \
@@ -37,13 +37,13 @@ function kibana_sanitize_config() {
         -i "$KIBANA_CONFIG_FILE"
 }
 
-if [[ -z "$(kibana_es_host)" ]]; then
-    echo "An elasticsearch host is required." >&2
+if [[ -z "$(es_proxy_host)" ]]; then
+    echo "An Elasticsearch proxy host is required." >&2
     exit 1
 fi
 
-if [[ -z "$(kibana_es_port)" ]]; then
-    echo "An elasticsearch port is required." >&2
+if [[ -z "$(es_proxy_port)" ]]; then
+    echo "An Elasticsearch proxy port is required." >&2
     exit 1
 fi
 
