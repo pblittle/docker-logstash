@@ -9,28 +9,28 @@ set -e -o pipefail
 ES_CONFIG_FILE="${SCRIPT_ROOT}/elasticsearch.yml"
 
 # If there is a linked Elasticsearch container, use it's host.
-# If there isn't a link, use ES_SERVICE_HOST if it is defined.
+# If there isn't a link, use ES_HOST if it is defined.
 # Otherwise fall back to 127.0.0.1.
 #
 function es_service_host() {
-    local default_host=${ES_SERVICE_HOST:-127.0.0.1}
+    local default_host=${ES_HOST:-127.0.0.1}
     local host=${ES_PORT_9200_TCP_ADDR:-$default_host}
 
     echo "$host"
 }
 
 # If there is a linked Elasticsearch container, use it's port.
-# If there isn't a link, use ES_SERVICE_PORT if it is defined.
+# If there isn't a link, use ES_PORT if it is defined.
 # Otherwise fall back to 9200.
 #
 function es_service_port() {
-    local default_port=${ES_SERVICE_PORT:-9200}
+    local default_port=${ES_PORT:-9200}
     local port=${ES_PORT_9200_TCP_PORT:-$default_port}
 
     echo "$port"
 }
 
-function es_embedded() {
+function es_service_embedded() {
     local embedded=false
 
     if [ "$(es_service_host)" = "127.0.0.1" ] ; then
@@ -61,7 +61,7 @@ if [[ -z "$(es_service_port)" ]]; then
     exit 1
 fi
 
-if [[ -z "$(es_embedded)" ]]; then
+if [[ -z "$(es_service_embedded)" ]]; then
     echo "An Elasticsearch embedded boolean value is required." >&2
     exit 1
 fi

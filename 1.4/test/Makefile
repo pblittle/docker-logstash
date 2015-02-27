@@ -7,7 +7,7 @@ default: test
 
 .PHONY: build
 build:
-	docker build --rm -t $(NAME):$(VERSION) $(BUILD_SRC)
+	docker build --rm -t pblittle/docker-logstash:$(VERSION) $(BUILD_SRC)
 
 .PHONY: test
 test: test-elasticsearch-embedded test-elasticsearch-linked

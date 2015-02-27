@@ -19,38 +19,21 @@
 }
 
 @test "Elasticsearch is not listening on port '9200'" {
-    skip 'The linked elasticsearch IP should be used here.'
-
-    netstat -an | grep ':9200'
-
-    [ "$status" -eq 1 ]
+    ! netstat -plant | grep ':9200'
 }
 
 @test "Elasticsearch is not listening on port '9300'" {
-    skip 'The linked elasticsearch IP should be used here.'
-
-    netstat -an | grep ':9300'
-
-    [ "$status" -eq 1 ]
+    ! netstat -plant | grep ':9300'
 }
 
-@test "Elasticsearch is reachable at '/_status'" {
-    skip 'The linked elasticsearch IP should be used here.'
-
-    run curl -i http://127.0.0.1:9200/_status
-
-    [ "$status" -eq 0 ]
-    [[ "$output" =~ "HTTP/1.1 200 OK" ]]
+@test "Kibana is listening on port '9292'" {
+    netstat -plant | grep ':9292'
 }
 
 @test "Kibana's elasticsearch server is 'http://"+window.location.hostname+":9200'" {
     run grep 'http://"+window.location.hostname+":9200' /opt/logstash/vendor/kibana/config.js
 
     [ "$status" -eq 0 ]
-}
-
-@test "Kibana is listening on port '9292'" {
-    netstat -plant | grep ':9292'
 }
 
 @test "Kibana dashboard reachable at '/index.html'" {
