@@ -53,9 +53,9 @@ function logstash_download_config() {
 # Instead download your file as normal
 #
 function logstash_sanitize_config() {
-    local embedded="$(es_embedded)"
-    local host="$(es_host)"
-    local port="$(es_port)"
+    local embedded="$(es_service_embedded)"
+    local host="$(es_service_host)"
+    local port="$(es_service_port)"
 
     sed -e "s|ES_EMBEDDED|${embedded}|g" \
         -e "s|ES_HOST|${host}|g" \
