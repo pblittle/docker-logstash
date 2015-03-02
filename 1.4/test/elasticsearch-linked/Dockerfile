@@ -8,6 +8,7 @@ RUN apt-get update \
         apt-utils \
         git \
         net-tools \
+        telnet \
         --no-install-recommends \
     && rm -rf /var/cache/apt/* \
     && rm -rf /var/lib/apt/lists/*
@@ -23,8 +24,8 @@ RUN git clone https://github.com/sstephenson/bats.git /tmp/bats \
 ENV TERM xterm-256color
 
 WORKDIR /app
+ADD test.bats /app/test.bats
 
-RUN mkdir -p /app/test
-ADD embedded.bats /app/test/embedded.bats
+EXPOSE 9200 9300
 
-CMD []
+CMD [ '/usr/local/bin/bats', '/app/test.bats' ]

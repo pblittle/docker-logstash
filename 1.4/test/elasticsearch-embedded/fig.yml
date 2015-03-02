@@ -1,0 +1,9 @@
+---
+logstash:
+  build: .
+  ports:
+   - '9200:9200'
+   - '9300:9300'
+   - '9292:9292'
+  environment:
+    LOGSTASH_TRACE: true

@@ -60,8 +60,8 @@ To have the linked Elasticsearch container's `bind_host` and `port` automaticall
 If you are using an external Elasticsearch server, simply set the `ES_HOST` and `ES_PORT` environment variables in your `run` command:
 
     $ docker run -d \
-      -e ES_HOST=<your_es_container_host> \
-      -e ES_PORT=<your_es_container_port> \
+      -e ES_HOST=<your_es_service_host> \
+      -e ES_PORT=<your_es_service_port> \
       -p 9292:9292 \
       pblittle/docker-logstash
 
