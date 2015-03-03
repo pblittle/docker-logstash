@@ -75,10 +75,38 @@ function logstash_start_agent() {
     local config_dir="$LOGSTASH_CONFIG_DIR"
     local log_file="$LOGSTASH_LOG_FILE"
 
-    exec "$LOGSTASH_BINARY" \
-         agent \
-         --config "$config_dir" \
-         --log "$log_file" \
-         -- \
-         web
+    case "$1" in
+    # run just the agent
+    'agent')
+        exec "$LOGSTASH_BINARY" \
+             agent \
+             --config "$config_dir" \
+             --log "$log_file" \
+             -- 
+        ;;
+    # test the logstash configuration
+    'configtest')
+        exec "$LOGSTASH_BINARY" \
+             agent \
+             --config "$config_dir" \
+             --log "$log_file" \
+             --configtest \
+             -- 
+        ;;
+    # run just the web
+    'web')
+        exec "$LOGSTASH_BINARY" \
+             web
+        ;;
+    # run agent+web (default operation)
+    *)
+        exec "$LOGSTASH_BINARY" \
+             agent \
+             --config "$config_dir" \
+             --log "$log_file" \
+             -- \
+             web
+        ;;
+    esac
+
 }
