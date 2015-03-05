@@ -29,3 +29,12 @@ test-elasticsearch-linked: build
 	fig rm && \
 	fig build && \
 	fig up
+
+.PHONY: test-logstash-configtest
+test-logstash-configtest: build
+
+	cd ${CURDIR}/logstash-configtest && \
+	fig stop && \
+	fig rm && \
+	fig build && \
+	fig up
