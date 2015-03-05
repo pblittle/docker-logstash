@@ -35,7 +35,7 @@ function main() {
 
     # Fire up logstash!
     #
-    logstash_start_agent
+    logstash_start_agent "$@"
 }
 
 main "$@"

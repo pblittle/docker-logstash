@@ -8,6 +8,7 @@ RUN apt-get update \
         apt-utils \
         git \
         net-tools \
+        telnet \
         --no-install-recommends \
     && rm -rf /var/cache/apt/* \
     && rm -rf /var/lib/apt/lists/*
@@ -25,4 +26,4 @@ ENV TERM xterm-256color
 WORKDIR /app
 ADD test.bats /app/test.bats
 
-CMD [ '/usr/local/bin/bats', '/app/test.bats' ]
+CMD []

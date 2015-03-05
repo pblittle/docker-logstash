@@ -1,5 +1,5 @@
 NAME = pblittle/docker-logstash-test
-VERSION = 0.12.1
+VERSION = 0.13.0
 
 BUILD_SRC = ${CURDIR}/../base
 
@@ -25,6 +25,15 @@ test-elasticsearch-embedded: build
 test-elasticsearch-linked: build
 
 	cd ${CURDIR}/elasticsearch-linked && \
+	fig stop && \
+	fig rm && \
+	fig build && \
+	fig up
+
+.PHONY: test-logstash-configtest
+test-logstash-configtest: build
+
+	cd ${CURDIR}/logstash-configtest && \
 	fig stop && \
 	fig rm && \
 	fig build && \
