@@ -8,6 +8,8 @@ set -e -o pipefail
 
 KIBANA_CONFIG_FILE="${LOGSTASH_SRC_DIR}/vendor/kibana/config.js"
 
+readonly PROXY_PROTOCOL_REGEX='\(http[s]\?\)'
+
 function es_proxy_host() {
     local host=${ES_PROXY_HOST:-'"+window.location.hostname+"'}
 
@@ -31,7 +33,7 @@ function kibana_sanitize_config() {
     local port="$(es_proxy_port)"
     local protocol="$(es_proxy_protocol)"
 
-    sed -e "s|http|${protocol}|g" \
+    sed -e "s|${PROXY_PROTOCOL_REGEX}|${protocol}|gI" \
         -e "s|\"+window.location.hostname+\"|${host}|g" \
         -e "s|9200|${port}|g" \
         -i "$KIBANA_CONFIG_FILE"

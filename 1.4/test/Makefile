@@ -30,6 +30,15 @@ test-elasticsearch-linked: build
 	fig build && \
 	fig up
 
+.PHONY: test-kibana-embedded
+test-kibana-embedded: build
+
+	cd ${CURDIR}/kibana-embedded && \
+	fig stop && \
+	fig rm && \
+	fig build && \
+	fig up
+
 .PHONY: test-logstash-configtest
 test-logstash-configtest: build
 
