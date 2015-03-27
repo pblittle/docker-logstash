@@ -1,4 +1,4 @@
-FROM pblittle/docker-logstash:0.13.1-dev
+FROM pblittle/docker-logstash:0.13.1
 MAINTAINER P. Barrett Little <barrett@barrettlittle.com> (@pblittle)
 
 # Download packages required to run the test suite
