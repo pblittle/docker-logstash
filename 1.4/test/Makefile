@@ -3,14 +3,9 @@ VERSION = 0.13.1
 
 BUILD_SRC = ${CURDIR}/../base
 
-default: test
-
 .PHONY: build
 build:
 	docker build --rm -t pblittle/docker-logstash:$(VERSION) $(BUILD_SRC)
-
-.PHONY: test
-test: test-elasticsearch-embedded test-elasticsearch-linked
 
 .PHONY: test-elasticsearch-embedded
 test-elasticsearch-embedded: build
