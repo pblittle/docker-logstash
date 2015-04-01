@@ -22,6 +22,50 @@ LOGSTASH_BINARY="${LOGSTASH_SRC_DIR}/bin/logstash"
 LOGSTASH_LOG_DIR='/var/log/logstash'
 LOGSTASH_LOG_FILE="${LOGSTASH_LOG_DIR}/logstash.log"
 
+function __download_config() {
+    local url="$1"
+    local dir="$2"
+
+    cd "${dir}" \
+        && curl -Os "${url}"
+}
+
+function __download_tar() {
+    : # no-op
+}
+
+function __download_zip() {
+    : # no-op
+}
+
+function __download_git() {
+    : # no-op
+}
+
+# Replaces ES_EMBEDDED, ES_HOST, and ES_PORT in your logstash.conf
+# file if they exist with the IP and port dynamically generated
+# by docker. If the host is 127.0.0.1, ES_EMBEDDED will be true.
+#
+# Note: Don't use this on a file mounting using a docker
+# volume, as the inode switch will cause `device or resource busy`
+# Instead download your file as normal
+#
+function __sanitize_config() {
+    local embedded="$(es_service_embedded)"
+    local host="$(es_service_host)"
+    local port="$(es_service_port)"
+    local config="$LOGSTASH_CONFIG_FILE"
+
+    if [ -f "$config" ]; then
+        sed -e "s|ES_EMBEDDED|${embedded}|g" \
+            -e "s|ES_HOST|${host}|g" \
+            -e "s|ES_PORT|${port}|g" \
+            -i "${config}"
+    else
+        echo "${config} does not exist"
+    fi
+}
+
 # Create the logstash conf dir if it doesn't already exist
 #
 function logstash_create_config_dir() {
@@ -32,35 +76,30 @@ function logstash_create_config_dir() {
     fi
 }
 
-# Download the logstash config if the config directory is empty
+# Download the logstash configs if the config directory is empty
 #
 function logstash_download_config() {
-    local config_dir="$LOGSTASH_CONFIG_DIR"
-    local config_file="$LOGSTASH_CONFIG_FILE"
-    local config_url="$LOGSTASH_CONFIG_URL"
+    local url="$LOGSTASH_CONFIG_URL"
+    local dir="$LOGSTASH_CONFIG_DIR"
+    local file="$LOGSTASH_CONFIG_FILE"
 
-    if [ ! "$(ls -A $config_dir)" ]; then
-        wget "$config_url" -O "$config_file"
+    if [ ! "$(ls -A $dir)" ]; then
+
+        case "$url" in
+            *.conf|*.json)
+                __download_config "$url" "$dir"
+                ;;
+            *.tar|*.tar.gz|*.tgz)
+                __download_tar "$url" "$dir"
+                ;;
+            *.war|*.zip)
+                __download_zip "$url" "$dir"
+                ;;
+            *.git)
+                __download_git "$url" "$dir"
+                ;;
+        esac
     fi
-}
-
-# Replace ES_HOST and ES_PORT in your logstash.conf file
-# if they exist with the IP and port dynamically generated
-# by docker.
-#
-# Note: Don't use this on a file mounting using a docker
-# volume, as the inode switch will cause `device or resource busy`
-# Instead download your file as normal
-#
-function logstash_sanitize_config() {
-    local embedded="$(es_service_embedded)"
-    local host="$(es_service_host)"
-    local port="$(es_service_port)"
-
-    sed -e "s|ES_EMBEDDED|${embedded}|g" \
-        -e "s|ES_HOST|${host}|g" \
-        -e "s|ES_PORT|${port}|g" \
-        -i "$LOGSTASH_CONFIG_FILE"
 }
 
 function logstash_create_log_dir() {
