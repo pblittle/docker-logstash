@@ -11,34 +11,34 @@ build:
 test-elasticsearch-embedded: build
 
 	cd ${CURDIR}/elasticsearch-embedded && \
-	fig stop && \
-	fig rm && \
-	fig build && \
-	fig up
+	docker-compose stop && \
+	docker-compose rm && \
+	docker-compose build && \
+	docker-compose up
 
 .PHONY: test-elasticsearch-linked
 test-elasticsearch-linked: build
 
 	cd ${CURDIR}/elasticsearch-linked && \
-	fig stop && \
-	fig rm && \
-	fig build && \
-	fig up
+	docker-compose stop && \
+	docker-compose rm && \
+	docker-compose build && \
+	docker-compose up
 
 .PHONY: test-kibana-embedded
 test-kibana-embedded: build
 
 	cd ${CURDIR}/kibana-embedded && \
-	fig stop && \
-	fig rm && \
-	fig build && \
-	fig up
+	docker-compose stop && \
+	docker-compose rm && \
+	docker-compose build && \
+	docker-compose up
 
 .PHONY: test-logstash-configtest
 test-logstash-configtest: build
 
 	cd ${CURDIR}/logstash-configtest && \
-	fig stop && \
-	fig rm && \
-	fig build && \
-	fig up
+	docker-compose stop && \
+	docker-compose rm && \
+	docker-compose build && \
+	docker-compose up
