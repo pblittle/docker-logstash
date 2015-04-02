@@ -84,7 +84,6 @@ function logstash_download_config() {
     local file="$LOGSTASH_CONFIG_FILE"
 
     if [ ! "$(ls -A $dir)" ]; then
-
         case "$url" in
             *.conf|*.json)
                 __download_config "$url" "$dir"
