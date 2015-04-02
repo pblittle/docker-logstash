@@ -19,8 +19,6 @@ function main() {
 
     logstash_download_config
 
-    logstash_sanitize_config
-
     kibana_sanitize_config
 
     elasticsearch_disable_dynamic
