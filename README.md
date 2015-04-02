@@ -14,7 +14,7 @@ To run the image, you have to first decide on one of three Elasticsearch configu
 
 ### Embedded Elasticsearch server
 
-By default, an example [logstash.conf][2] will be downloaded using `wget` and used in your container.
+By default, an example [logstash.conf][2] will be downloaded and used in your container.
 
     $ docker run -d \
       -p 9292:9292 \
