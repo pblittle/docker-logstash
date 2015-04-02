@@ -99,6 +99,8 @@ function logstash_download_config() {
                 __download_git "$url" "$dir"
                 ;;
         esac
+
+        __sanitize_config
     fi
 }
 
