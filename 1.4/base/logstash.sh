@@ -81,7 +81,6 @@ function logstash_create_config_dir() {
 function logstash_download_config() {
     local url="$LOGSTASH_CONFIG_URL"
     local dir="$LOGSTASH_CONFIG_DIR"
-    local file="$LOGSTASH_CONFIG_FILE"
 
     if [ ! "$(ls -A $dir)" ]; then
         case "$url" in
