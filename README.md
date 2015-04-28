@@ -14,12 +14,14 @@ To run the image, you have to first decide on one of three Elasticsearch configu
 
 ### Embedded Elasticsearch server
 
-By default, an example [logstash.conf][2] will be downloaded using `wget` and used in your container.
+By default, an example [logstash.conf][2] will be downloaded and used in your container.
 
     $ docker run -d \
       -p 9292:9292 \
       -p 9200:9200 \
       pblittle/docker-logstash
+      
+The default `logstash.conf` only listens on stdin and file inputs. If you wish to configure tcp and/or udp input, use your own logstash configuration file and expose the ports yourself. See [logstash documentation][10] for config syntax and more information.
 
 To use your own config file, set the `LOGSTASH_CONFIG_URL` environment variable using the `-e` flag as follows:
 
@@ -113,3 +115,4 @@ This application is distributed under the [Apache License, Version 2.0][5].
 [7]: http://logstash.net
 [8]: http://www.elasticsearch.org/overview/elasticsearch
 [9]: http://www.elasticsearch.org/overview/kibana
+[10]: http://logstash.net/docs/1.4.2/configuration
