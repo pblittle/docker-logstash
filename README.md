@@ -128,9 +128,9 @@ You can now verify the logstash installation by visiting the Kibana dashboard:
 
     http://<your_container_ip>:9292/index.html#/dashboard/file/logstash.json
 
-## Acknowledgements
+## Thank you
 
-Special shoutout to @ehazlett's excellent post, [logstash and Kibana via Docker][4].
+A huge thank you to the project [Contributors][4] and users. I really appreciate the support.
 
 ## Contributing
 
@@ -148,7 +148,7 @@ This application is distributed under the [Apache License, Version 2.0][5].
 [1]: https://registry.hub.docker.com/u/pblittle/docker-logstash
 [2]: https://gist.githubusercontent.com/pblittle/8778567/raw/logstash.conf
 [3]: https://www.vagrantup.com
-[4]: http://ehazlett.github.io/applications/2013/08/28/logstash-kibana/
+[4]: https://github.com/pblittle/docker-logstash/graphs/contributors
 [5]: http://www.apache.org/licenses/LICENSE-2.0
 [7]: http://logstash.net
 [8]: http://www.elasticsearch.org/overview/elasticsearch
