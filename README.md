@@ -6,7 +6,7 @@ This is a highly configurable [logstash][7] (1.4.2) image running [Elasticsearch
 
 To run the image, you have to first decide which services you want to run in your container:
 
- * Full ELK stack (default)
+#### Full ELK stack (default)
 
 ````
 $ docker run -d \
@@ -15,7 +15,7 @@ $ docker run -d \
   pblittle/docker-logstash
 ````
 
- * Logstash agent only
+#### Logstash agent only
 
 ````
 $ docker run \
@@ -24,7 +24,7 @@ $ docker run \
   agent
 ````
 
- * Logstash config test only
+#### Logstash config test only
 
 ````
 $ docker run \
@@ -33,7 +33,7 @@ $ docker run \
   configtest
 ````
 
- * Embedded Kibana web interface only
+#### Embedded Kibana web interface only
 
 ````
 $ docker run \
@@ -50,7 +50,7 @@ If you plan on using Elasticsearch, the following three configurations are suppo
  * Use a linked container running Elasticsearch
  * Use an external Elasticsearch server
 
-### Embedded Elasticsearch server
+#### Embedded Elasticsearch server
 
 By default, an example [logstash.conf][2] will be downloaded and used in your container.
 
@@ -77,7 +77,7 @@ To use config files from the local file system, mount the directory as a volume 
       -p 9200:9200 \
       pblittle/docker-logstash
 
-### Linked container running Elasticsearch
+#### Linked container running Elasticsearch
 
 If you want to link to a container running Elasticsearch rather than use the embedded Elasticsearch server:
 
@@ -95,7 +95,7 @@ To have the linked Elasticsearch container's `bind_host` and `port` automaticall
       }
     }
 
-### External Elasticsearch server
+#### External Elasticsearch server
 
 If you are using an external Elasticsearch server, simply set the `ES_HOST` and `ES_PORT` environment variables in your `run` command:
 
@@ -122,7 +122,7 @@ From there, build and run a container using the newly created virtual machine:
 
     $ make
 
-### Finally, verify the installation
+## Finally, verify the installation
 
 You can now verify the logstash installation by visiting the Kibana dashboard:
 
