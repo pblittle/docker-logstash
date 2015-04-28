@@ -1,12 +1,50 @@
-> Note: This release stores logstash config files in `/opt/logstash/conf.d/`. Please update any references to `/opt/logstash.conf` in your existing deployment configs. `/opt/logstash/conf.d/` will be used from this release, `0.11.0`, forward.
-
 # Logstash Dockerfile
 
 This is a highly configurable [logstash][7] (1.4.2) image running [Elasticsearch][8] (1.1.1) and [Kibana][9] (3.0.1).
 
 ## How to use this image
 
-To run the image, you have to first decide on one of three Elasticsearch configurations:
+To run the image, you have to first decide which services you want to run in your container:
+
+ * Full ELK stack (default)
+
+````
+$ docker run -d \
+  -p 9292:9292 \
+  -p 9200:9200 \
+  pblittle/docker-logstash
+````
+
+ * Logstash agent only
+
+````
+$ docker run \
+  <your_run_options> \
+  pblittle/docker-logstash \
+  agent
+````
+
+ * Logstash config test only
+
+````
+$ docker run \
+  <your_run_options> \
+  pblittle/docker-logstash \
+  configtest
+````
+
+ * Embedded Kibana web interface only
+
+````
+$ docker run \
+  <your_run_options> \
+  pblittle/docker-logstash \
+  web
+````
+
+## Elasticsearch server configuration
+
+If you plan on using Elasticsearch, the following three configurations are supported:
 
  * Use the embedded Elasticsearch server
  * Use a linked container running Elasticsearch
@@ -20,7 +58,7 @@ By default, an example [logstash.conf][2] will be downloaded and used in your co
       -p 9292:9292 \
       -p 9200:9200 \
       pblittle/docker-logstash
-      
+
 The default `logstash.conf` only listens on stdin and file inputs. If you wish to configure tcp and/or udp input, use your own logstash configuration file and expose the ports yourself. See [logstash documentation][10] for config syntax and more information.
 
 To use your own config file, set the `LOGSTASH_CONFIG_URL` environment variable using the `-e` flag as follows:
