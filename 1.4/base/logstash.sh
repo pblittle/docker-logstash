@@ -51,10 +51,10 @@ function __download_git() {
 # Instead download your file as normal
 #
 function __sanitize_config() {
-    local embedded="$(es_service_embedded)"
-    local host="$(es_service_host)"
-    local port="$(es_service_port)"
     local config="$LOGSTASH_CONFIG_FILE"
+    local -r embedded="$(es_service_embedded)"
+    local -r host="$(es_service_host)"
+    local -r port="$(es_service_port)"
 
     if [ -f "$config" ]; then
         sed -e "s|ES_EMBEDDED|${embedded}|g" \
