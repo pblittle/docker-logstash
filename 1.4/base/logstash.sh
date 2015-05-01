@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fail fast, including pipelines
-set -e -o pipefail
+set -euo pipefail
 
 # Set LOGSTASH_TRACE to enable debugging
 [[ $LOGSTASH_TRACE ]] && set -x
