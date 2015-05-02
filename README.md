@@ -124,9 +124,9 @@ From there, build and run a container using the newly created virtual machine:
 
 ## Finally, verify the installation
 
-You can now verify the logstash installation by visiting the Kibana dashboard:
+You can now verify the logstash installation by visiting the sample Kibana dashboard:
 
-    http://<your_container_ip>:9292/index.html#/dashboard/file/logstash.json
+    http://<your_container_ip>:9292/index.html#/dashboard/file/default.json
 
 ## Thank you
 
