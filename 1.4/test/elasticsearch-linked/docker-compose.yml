@@ -1,10 +1,10 @@
 ---
 elasticsearch:
-  image: elasticsearch
+  image: elasticsearch:latest
   ports:
     - '9200:9200'
     - '9300:9300'
-  command: '/elasticsearch/bin/elasticsearch -Des.http.cors.enabled=true'
+  command: 'elasticsearch -Des.http.cors.enabled=true'
 
 logstash:
   build: .
