@@ -86,7 +86,7 @@ If you want to link to a container running Elasticsearch rather than use the emb
       -p 9292:9292 \
       pblittle/docker-logstash
 
-To have the linked Elasticsearch container's `bind_host` and `port` automatically detected, you will need to set the `bind_host` and `port` to `ES_HOST` and `ES_PORT` respectively in your logstash config file. For example:
+To have the linked Elasticsearch container's `bind_host` and `port` automatically detected, you will need to set the `bind_host` and `port` to `ES_HOST` and `ES_PORT` respectively in your elasticsearch output config. For example:
 
     output {
       elasticsearch {
