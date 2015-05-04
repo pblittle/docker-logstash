@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fail fast, including pipelines
-set -e -o pipefail
+set -euo pipefail
 
 # Set LOGSTASH_TRACE to enable debugging
 [[ $LOGSTASH_TRACE ]] && set -x
@@ -29,9 +29,9 @@ function es_proxy_protocol() {
 }
 
 function kibana_sanitize_config() {
-    local host="$(es_proxy_host)"
-    local port="$(es_proxy_port)"
-    local protocol="$(es_proxy_protocol)"
+    local -r host="$(es_proxy_host)"
+    local -r port="$(es_proxy_port)"
+    local -r protocol="$(es_proxy_protocol)"
 
     sed -e "s|${PROXY_PROTOCOL_REGEX}|${protocol}|gI" \
         -e "s|\"+window.location.hostname+\"|${host}|g" \
