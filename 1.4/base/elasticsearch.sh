@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fail fast, including pipelines
-set -euo pipefail
+set -e -o pipefail
 
 ES_CONFIG_FILE="${SCRIPT_ROOT}/elasticsearch.yml"
 
