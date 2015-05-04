@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fail fast, including pipelines
-set -euo pipefail
+set -e -o pipefail
 
 KIBANA_CONFIG_FILE="${LOGSTASH_SRC_DIR}/vendor/kibana/config.js"
 
