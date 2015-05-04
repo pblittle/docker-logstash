@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Fail fast, including pipelines
-set -euo pipefail
+set -e -o pipefail
 
 LF_SSL_DIR='/opt/ssl'
 
