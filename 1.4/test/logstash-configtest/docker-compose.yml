@@ -1,6 +1,4 @@
 ---
 logstash:
   build: .
-  environment:
-    LOGSTASH_TRACE: true
   command: configtest

@@ -12,5 +12,3 @@ logstash:
    - '9292:9292'
   links:
     - elasticsearch:es
-  environment:
-    LOGSTASH_TRACE: true

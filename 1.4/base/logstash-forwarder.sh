@@ -3,9 +3,6 @@
 # Fail fast, including pipelines
 set -euo pipefail
 
-# Set LOGSTASH_TRACE to enable debugging
-[[ $LOGSTASH_TRACE ]] && set -x
-
 LF_SSL_DIR='/opt/ssl'
 
 # The default logstash-forwarder keys are insecure. Please do not

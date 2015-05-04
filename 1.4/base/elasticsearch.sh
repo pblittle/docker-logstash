@@ -3,9 +3,6 @@
 # Fail fast, including pipelines
 set -euo pipefail
 
-# Set LOGSTASH_TRACE to enable debugging
-[[ $LOGSTASH_TRACE ]] && set -x
-
 ES_CONFIG_FILE="${SCRIPT_ROOT}/elasticsearch.yml"
 
 # If there is a linked Elasticsearch container, use it's host.

@@ -7,4 +7,3 @@ logstash:
    - '9292:9292'
   environment:
     ES_PROXY_PROTOCOL: https
-    LOGSTASH_TRACE: true
