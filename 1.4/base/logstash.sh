@@ -3,9 +3,6 @@
 # Fail fast, including pipelines
 set -euo pipefail
 
-# Set LOGSTASH_TRACE to enable debugging
-[[ $LOGSTASH_TRACE ]] && set -x
-
 LOGSTASH_SRC_DIR='/opt/logstash'
 LOGSTASH_BINARY="${LOGSTASH_SRC_DIR}/bin/logstash"
 
