@@ -19,11 +19,11 @@ LOGSTASH_LOG_FILE="${LOGSTASH_LOG_DIR}/logstash.log"
 # Download single config file. Source file extension must be .conf
 #
 function __download_config() {
-    local url="$1"
-    local dir="$2"
+    local config_url="$1"
+    local config_dir="$2"
 
-    cd "${dir}" \
-        && curl -Os "${url}"
+    cd "${config_dir}" \
+        && curl -Os "${config_url}"
 }
 
 # Download and extract config file(s) using a tarball. Source file extension
