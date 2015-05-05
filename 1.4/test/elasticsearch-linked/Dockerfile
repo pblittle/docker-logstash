@@ -8,7 +8,6 @@ RUN apt-get update \
         apt-utils \
         git \
         net-tools \
-        telnet \
         --no-install-recommends \
     && rm -rf /var/cache/apt/* \
     && rm -rf /var/lib/apt/lists/*
