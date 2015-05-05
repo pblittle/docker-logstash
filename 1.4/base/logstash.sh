@@ -16,6 +16,8 @@ LOGSTASH_CONFIG_DIR="${LOGSTASH_SRC_DIR}/conf.d"
 LOGSTASH_LOG_DIR='/var/log/logstash'
 LOGSTASH_LOG_FILE="${LOGSTASH_LOG_DIR}/logstash.log"
 
+# Download single config file. Source file extension must be .conf
+#
 function __download_config() {
     local url="$1"
     local dir="$2"
@@ -24,14 +26,23 @@ function __download_config() {
         && curl -Os "${url}"
 }
 
+# Download and extract config file(s) using a tarball. Source file extension
+# must be either .tar, .tar.gz, or .tgz.
+#
 function __download_tar() {
     : # no-op
 }
 
+# Download and extract config file(s) using a zipball. Source file extension
+# must be .zip.
+#
 function __download_zip() {
     : # no-op
 }
 
+# Download config file(s) from a git repository. Source file extension
+# must be .git.
+#
 function __download_git() {
     : # no-op
 }
