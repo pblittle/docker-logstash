@@ -12,6 +12,7 @@ LOGSTASH_BINARY="${LOGSTASH_SRC_DIR}/bin/logstash"
 LOGSTASH_DEFAULT_CONFIG_URL='https://gist.githubusercontent.com/pblittle/8778567/raw/logstash.conf'
 LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL:-${LOGSTASH_DEFAULT_CONFIG_URL}}
 LOGSTASH_CONFIG_DIR="${LOGSTASH_SRC_DIR}/conf.d"
+LOGSTASH_CONFIG_PATH="${LOGSTASH_CONFIG_DIR}/**/*.conf"
 
 LOGSTASH_LOG_DIR='/var/log/logstash'
 LOGSTASH_LOG_FILE="${LOGSTASH_LOG_DIR}/logstash.log"
@@ -30,7 +31,13 @@ function __download_config() {
 # must be either .tar, .tar.gz, or .tgz.
 #
 function __download_tar() {
-    : # no-op
+    local config_url="$1"
+    local config_dir="$2"
+
+    pushd "${config_dir}" > /dev/null
+    curl -SL "${config_url}" \
+        | tar -xzC "${config_dir}" --strip-components=1
+    popd > /dev/null
 }
 
 # Download and extract config file(s) using a zipball. Source file extension
@@ -63,11 +70,11 @@ function __sanitize_config() {
     local config_dir="$LOGSTASH_CONFIG_DIR"
 
     if [ "$(ls -A $config_dir)" ]; then
-        find $config_dir -type f -print0 | \
-        xargs sed -i \
-            -e "s|ES_EMBEDDED|${embedded}|g" \
-            -e "s|ES_HOST|${host}|g" \
-            -e "s|ES_PORT|${port}|g"
+        find $config_dir -type f -print0 \
+            | xargs --null sed -i \
+                -e "s|ES_EMBEDDED|${embedded}|g" \
+                -e "s|ES_HOST|${host}|g" \
+                -e "s|ES_PORT|${port}|g"
     fi
 }
 
@@ -89,7 +96,7 @@ function logstash_download_config() {
 
     if [ ! "$(ls -A $config_dir)" ]; then
         case "$config_url" in
-            *.conf|*.json)
+            *.conf)
                 __download_config "$config_url" "$config_dir"
                 ;;
             *.tar|*.tar.gz|*.tgz)
@@ -117,7 +124,7 @@ function logstash_create_log_dir() {
 
 function logstash_start_agent() {
     local binary="$LOGSTASH_BINARY"
-    local config_dir="$LOGSTASH_CONFIG_DIR"
+    local config_path="$LOGSTASH_CONFIG_PATH"
     local log_file="$LOGSTASH_LOG_FILE"
 
     case "$1" in
@@ -125,7 +132,7 @@ function logstash_start_agent() {
     'agent')
         exec "$binary" \
              agent \
-             --config "$config_dir" \
+             --config "$config_path" \
              --log "$log_file" \
              --
         ;;
@@ -133,7 +140,7 @@ function logstash_start_agent() {
     'configtest')
         exec "$binary" \
              agent \
-             --config "$config_dir" \
+             --config "$config_path" \
              --log "$log_file" \
              --configtest \
              --
@@ -147,7 +154,7 @@ function logstash_start_agent() {
     *)
         exec "$binary" \
              agent \
-             --config "$config_dir" \
+             --config "$config_path" \
              --log "$log_file" \
              -- \
              web

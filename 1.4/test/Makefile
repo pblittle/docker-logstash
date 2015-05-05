@@ -42,3 +42,12 @@ test-logstash-configtest: build
 	docker-compose rm && \
 	docker-compose build && \
 	docker-compose up
+
+.PHONY: test-logstash-tarball-config
+test-logstash-tarball-config: build
+
+	cd ${CURDIR}/logstash-tarball-config && \
+	docker-compose stop && \
+		docker-compose rm && \
+	docker-compose build && \
+	docker-compose up
