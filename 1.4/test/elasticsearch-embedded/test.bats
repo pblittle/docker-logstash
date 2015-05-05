@@ -7,7 +7,7 @@
 }
 
 @test "Logstash.config contains '{ elasticsearch { embedded => true }'" {
-    run grep 'embedded => true' /opt/logstash/conf.d/logstash.json
+    run grep -r 'embedded => true' /opt/logstash/conf.d
 
     [ "$status" -eq 0 ]
 }
