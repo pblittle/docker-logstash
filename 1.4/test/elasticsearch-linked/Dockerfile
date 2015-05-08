@@ -1,4 +1,4 @@
-FROM pblittle/docker-logstash:0.15.2
+FROM pblittle/docker-logstash:0.16.0
 MAINTAINER P. Barrett Little <barrett@barrettlittle.com> (@pblittle)
 
 # Download packages required to run the test suite
@@ -8,7 +8,6 @@ RUN apt-get update \
         apt-utils \
         git \
         net-tools \
-        telnet \
         --no-install-recommends \
     && rm -rf /var/cache/apt/* \
     && rm -rf /var/lib/apt/lists/*

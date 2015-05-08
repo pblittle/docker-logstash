@@ -1,0 +1,9 @@
+---
+logstash:
+  build: .
+  ports:
+   - '9200:9200'
+   - '9300:9300'
+   - '9292:9292'
+  environment:
+    LOGSTASH_CONFIG_URL: https://github.com/pblittle/logstash-configs/archive/master.tar.gz

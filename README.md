@@ -42,26 +42,23 @@ $ docker run \
   web
 ````
 
-## Elasticsearch server configuration
+## Logstash configuration
 
-If you plan on using Elasticsearch, the following three configurations are supported:
+There are currently two supported ways of including your Logstash config files in your container:
 
- * Use the embedded Elasticsearch server
- * Use a linked container running Elasticsearch
- * Use an external Elasticsearch server
+  * Download your hosted config files from the Internet
+  * Mount a volume on the host machine containing your config files
 
-#### Embedded Elasticsearch server
+Regardless of the download method, your config files must be one of the following two file types:
 
-By default, an example [logstash.conf][2] will be downloaded and used in your container.
+  * A monolithic config file. The file extension must be `.conf`.
+  * A tarball containing your config files. The file extension must be either `.tar`, `.tar.gz`, or `.tgz`.
 
-    $ docker run -d \
-      -p 9292:9292 \
-      -p 9200:9200 \
-      pblittle/docker-logstash
+> Any files in `/opt/logstash/conf.d` with the `.conf` extension in the container will get loaded by logstash.
 
-The default `logstash.conf` only listens on stdin and file inputs. If you wish to configure tcp and/or udp input, use your own logstash configuration file and expose the ports yourself. See [logstash documentation][10] for config syntax and more information.
+#### Download your config files from the Internet
 
-To use your own config file, set the `LOGSTASH_CONFIG_URL` environment variable using the `-e` flag as follows:
+To use your own hosted config files, set the `LOGSTASH_CONFIG_URL` environment variable to your logstash config URL using the `-e` flag as follows:
 
     $ docker run -d \
       -e LOGSTASH_CONFIG_URL=<your_logstash_config_url> \
@@ -69,7 +66,18 @@ To use your own config file, set the `LOGSTASH_CONFIG_URL` environment variable 
       -p 9200:9200 \
       pblittle/docker-logstash
 
-To use config files from the local file system, mount the directory as a volume using the `-v` flag. Any file in `/opt/logstash/conf.d` in the container will get loaded by logstash.
+By default, if `LOGSTASH_CONFIG_URL` isn't defined, an example [logstash.conf][2] will be downloaded and used in your container.
+
+    $ docker run -d \
+      -p 9292:9292 \
+      -p 9200:9200 \
+      pblittle/docker-logstash
+
+> The default `logstash.conf` only listens on stdin and file inputs. If you wish to configure `tcp` and/or `udp` input, use your own logstash configuration files and expose the ports yourself. See [logstash documentation][10] for config syntax and more information.
+
+#### Mount a volume containing your config files
+
+To use config files from the local file system, mount the config directory as a volume using the `-v` flag. For example:
 
     $ docker run -d \
       -v <your_logstash_config_dir>:/opt/logstash/conf.d \
@@ -77,9 +85,17 @@ To use config files from the local file system, mount the directory as a volume 
       -p 9200:9200 \
       pblittle/docker-logstash
 
+## Elasticsearch server integration
+
+If you plan on using Elasticsearch, the following three integration methods are supported:
+
+ * A linked container running Elasticsearch
+ * An external Elasticsearch server
+ * The embedded Elasticsearch server
+
 #### Linked container running Elasticsearch
 
-If you want to link to a container running Elasticsearch rather than use the embedded Elasticsearch server:
+If you want to link to a container running Elasticsearch, simply use the `--link` flag to connect to the container:
 
     $ docker run -d \
       --link <your_es_container_name>:es \
@@ -92,6 +108,17 @@ To have the linked Elasticsearch container's `bind_host` and `port` automaticall
       elasticsearch {
         bind_host => "ES_HOST"
         port => "ES_PORT"
+        protocol => "http"
+      }
+    }
+
+If you are linking to an Elasticsearch container running on `172.0.4.20:9200`, the config above will be transformed into:
+
+    output {
+      elasticsearch {
+        host => "172.0.4.20"
+        port => "9200"
+        protocol => "http"
       }
     }
 
@@ -104,6 +131,12 @@ If you are using an external Elasticsearch server, simply set the `ES_HOST` and 
       -e ES_PORT=<your_es_service_port> \
       -p 9292:9292 \
       pblittle/docker-logstash
+
+#### Embedded Elasticsearch server
+
+The embedded Elasticsearch server will be used by default if you don't provide either of the configuration options above.
+
+> Please note, the embedded Elasticsearch server was not designed for use in Production.
 
 ## Optional, build and run the image from source
 
