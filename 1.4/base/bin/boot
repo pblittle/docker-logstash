@@ -9,7 +9,8 @@ set -e -o pipefail
 # Set LOGSTASH_TRACE to enable debugging
 [[ $LOGSTASH_TRACE ]] && set -x
 
-export SCRIPT_ROOT=$(readlink -f "$(dirname "$0")"/..)
+SCRIPT_ROOT=$(readlink -f "$(dirname "$0")"/..)
+export SCRIPT_ROOT
 
 . "${SCRIPT_ROOT}/elasticsearch.sh" || exit 1
 . "${SCRIPT_ROOT}/logstash.sh" || exit 1
