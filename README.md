@@ -19,7 +19,6 @@ $ docker run -d \
 
 ````
 $ docker run \
-  <your_run_options> \
   pblittle/docker-logstash \
   agent
 ````
@@ -28,7 +27,6 @@ $ docker run \
 
 ````
 $ docker run \
-  <your_run_options> \
   pblittle/docker-logstash \
   configtest
 ````
@@ -37,7 +35,6 @@ $ docker run \
 
 ````
 $ docker run \
-  <your_run_options> \
   pblittle/docker-logstash \
   web
 ````
@@ -46,19 +43,19 @@ $ docker run \
 
 There are currently two supported ways of including your Logstash config files in your container:
 
-  * Download your hosted config files from the Internet
+  * Download your config files from the Internet
   * Mount a volume on the host machine containing your config files
 
-Regardless of the download method, your config files must be one of the following two file types:
-
-  * A monolithic config file. The file extension must be `.conf`.
-  * A tarball containing your config files. The file extension must be either `.tar`, `.tar.gz`, or `.tgz`.
-
-> Any files in `/opt/logstash/conf.d` with the `.conf` extension in the container will get loaded by logstash.
+> Any files in `/opt/logstash/conf.d` with the `.conf` extension will get loaded by logstash.
 
 #### Download your config files from the Internet
 
-To use your own hosted config files, set the `LOGSTASH_CONFIG_URL` environment variable to your logstash config URL using the `-e` flag as follows:
+To use your own hosted config files, your config files must be one of the following two file types:
+
+  * A monolithic config file (`*.conf`)
+  * A tarball containing your config files (`*.tar`, `*.tar.gz`, or `*.tgz`)
+
+With your config files ready and in the correct format, set `LOGSTASH_CONFIG_URL` to your logstash config URL using the `-e` flag as follows:
 
     $ docker run -d \
       -e LOGSTASH_CONFIG_URL=<your_logstash_config_url> \
@@ -68,12 +65,7 @@ To use your own hosted config files, set the `LOGSTASH_CONFIG_URL` environment v
 
 By default, if `LOGSTASH_CONFIG_URL` isn't defined, an example [logstash.conf][2] will be downloaded and used in your container.
 
-    $ docker run -d \
-      -p 9292:9292 \
-      -p 9200:9200 \
-      pblittle/docker-logstash
-
-> The default `logstash.conf` only listens on stdin and file inputs. If you wish to configure `tcp` and/or `udp` input, use your own logstash configuration files and expose the ports yourself. See [logstash documentation][10] for config syntax and more information.
+> The default `logstash.conf` only listens on `stdin` and `file` inputs. If you wish to configure `tcp` and/or `udp` input, use your own logstash configuration files and expose the ports yourself. See [logstash documentation][10] for config syntax and more information.
 
 #### Mount a volume containing your config files
 
