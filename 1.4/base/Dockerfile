@@ -27,6 +27,6 @@ EXPOSE 9292
 # Start logstash
 ENTRYPOINT ["/app/bin/boot"]
 
-# Valid commands: "agent", "web", "configtest"
-# Default (empty command): "agent" & "web"
+# Valid commands: `agent`, `web`, `configtest`
+# Default (empty command) runs the ELK stack
 CMD []
