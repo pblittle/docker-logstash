@@ -1,5 +1,5 @@
 FROM java:7-jre
-MAINTAINER P. Barrett Little <barrett@barrettlittle.com>
+MAINTAINER P. Barrett Little <barrett@barrettlittle.com> (@pblittle)
 
 # Download version 1.4.2 of logstash
 RUN cd /tmp && \
@@ -15,12 +15,18 @@ RUN /opt/logstash/bin/plugin install contrib
 RUN mkdir /app
 ADD . /app
 
+# Set default data directory
+ENV DATA_DIR /data
+
+# Define mountable directory
+VOLUME ${DATA_DIR}
+
 # Kibana
 EXPOSE 9292
 
 # Start logstash
 ENTRYPOINT ["/app/bin/boot"]
 
-# Valid commands: "agent", "web", "configtest"
-# Default (empty command): "agent" & "web"
+# Valid commands: `agent`, `web`, `configtest`
+# Default (empty command) runs the ELK stack
 CMD []
