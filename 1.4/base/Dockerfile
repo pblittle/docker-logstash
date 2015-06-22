@@ -15,6 +15,12 @@ RUN /opt/logstash/bin/plugin install contrib
 RUN mkdir /app
 ADD . /app
 
+# Set default data directory
+ENV DATA_DIR /data
+
+# Define mountable directory
+VOLUME ${DATA_DIR}
+
 # Kibana
 EXPOSE 9292
 
