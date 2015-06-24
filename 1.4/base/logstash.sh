@@ -23,8 +23,9 @@ function __download_config() {
     local config_url="$1"
     local config_dir="$2"
 
-    cd "${config_dir}" \
-        && curl -Os "${config_url}"
+    pushd "${config_dir}" > /dev/null
+    curl -Os "${config_url}"
+    popd > /dev/null
 }
 
 # Download and extract config file(s) using a tarball. Source file extension
