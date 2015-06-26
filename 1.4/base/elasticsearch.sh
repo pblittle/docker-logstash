@@ -38,12 +38,13 @@ function es_service_embedded() {
 }
 
 function elasticsearch_disable_dynamic() {
-    local config_file="$ES_CONFIG_FILE"
+    local -r config="$ES_CONFIG_FILE"
 
-    if [ ! -f "$config_file" ]; then
-        cat > "$config_file" << EOF
+    if [ ! -f "$config" ]; then
+        cat > "$config" << EOF
 ---
-script.disable_dynamic: true
+http.cors.enabled: true
+http.cors.allow-origin: "/.*/"
 EOF
     fi
 }

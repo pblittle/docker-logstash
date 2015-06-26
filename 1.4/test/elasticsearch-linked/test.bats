@@ -12,8 +12,14 @@
     [ "$status" -eq 0 ]
 }
 
-@test "Elasticsearch.yml contains 'script.disable_dynamic: true'" {
-    run grep 'script.disable_dynamic: true' /app/elasticsearch.yml
+@test "Elasticsearch.yml contains 'http.cors.enabled: true'" {
+    run grep 'http.cors.enabled: true' /app/elasticsearch.yml
+
+    [ "$status" -eq 0 ]
+}
+
+@test "Elasticsearch.yml contains 'http.cors.allow-origin: "/.*/"'" {
+    run grep 'http.cors.allow-origin: "/.*/"' /app/elasticsearch.yml
 
     [ "$status" -eq 0 ]
 }
