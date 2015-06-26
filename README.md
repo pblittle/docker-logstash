@@ -1,6 +1,6 @@
 # Logstash Dockerfile
 
-This is a highly configurable [logstash][7] (1.4.2) image running [Elasticsearch][8] (1.1.1) and [Kibana][9] (3.0.1).
+This is a highly configurable [logstash][7] (1.4.3) image running [Elasticsearch][8] (1.5.2) and [Kibana][9] (3.1.2).
 
 ## How to use this image
 
@@ -175,7 +175,7 @@ This application is distributed under the [Apache License, Version 2.0][5].
 [3]: https://www.vagrantup.com
 [4]: https://github.com/pblittle/docker-logstash/graphs/contributors
 [5]: http://www.apache.org/licenses/LICENSE-2.0
-[7]: http://logstash.net
-[8]: http://www.elasticsearch.org/overview/elasticsearch
-[9]: http://www.elasticsearch.org/overview/kibana
-[10]: http://logstash.net/docs/1.4.2/configuration
+[7]: https://www.elastic.co/products/logstash
+[8]: https://www.elastic.co/products/elasticsearch
+[9]: https://www.elastic.co/products/kibana
+[10]: https://www.elastic.co/guide/en/logstash/current/configuration.html
