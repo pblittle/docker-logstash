@@ -3,8 +3,6 @@
 # Fail fast, including pipelines
 set -e -o pipefail
 
-ES_CONFIG_FILE="${SCRIPT_ROOT}/elasticsearch.yml"
-
 # If there is a linked Elasticsearch container, use it's host.
 # If there isn't a link, use ES_HOST if it is defined.
 # Otherwise fall back to 127.0.0.1.
