@@ -13,13 +13,13 @@
 }
 
 @test "Elasticsearch.yml contains 'http.cors.enabled: true'" {
-    run grep 'http.cors.enabled: true' /app/elasticsearch.yml
+    run grep 'http.cors.enabled: true' /opt/logstash/elasticsearch.yml
 
     [ "$status" -eq 0 ]
 }
 
 @test "Elasticsearch.yml contains 'http.cors.allow-origin: "/.*/"'" {
-    run grep 'http.cors.allow-origin: "/.*/"' /app/elasticsearch.yml
+    run grep 'http.cors.allow-origin: "/.*/"' /opt/logstash/elasticsearch.yml
 
     [ "$status" -eq 0 ]
 }

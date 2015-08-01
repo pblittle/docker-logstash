@@ -22,7 +22,6 @@ RUN git clone https://github.com/sstephenson/bats.git /tmp/bats \
 #
 ENV TERM xterm-256color
 
-WORKDIR /app
 ADD test.bats /app/test.bats
 
 EXPOSE 9200 9300
