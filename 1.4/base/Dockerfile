@@ -6,6 +6,10 @@ ENV LOGSTASH_VERSION 1.4.3
 
 # Set default Logstash source directory
 ENV LOGSTASH_SRC_DIR /opt/logstash
+
+# Set default data directory
+ENV DATA_DIR /data
+
 # Download and install Logstash
 RUN cd /tmp && \
     wget https://download.elastic.co/logstash/logstash/logstash-${LOGSTASH_VERSION}.tar.gz && \
@@ -20,8 +24,6 @@ RUN ${LOGSTASH_SRC_DIR}/bin/plugin install contrib
 RUN mkdir /app
 ADD . /app
 
-# Set default data directory
-ENV DATA_DIR /data
 # Set the working directory
 WORKDIR ${LOGSTASH_SRC_DIR}
 
