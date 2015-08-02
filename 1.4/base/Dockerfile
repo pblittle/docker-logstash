@@ -2,7 +2,7 @@ FROM java:7-jre
 MAINTAINER P. Barrett Little <barrett@barrettlittle.com> (@pblittle)
 
 # Set default Logstash version
-ENV LOGSTASH_VERSION 1.4.3
+ENV LOGSTASH_VERSION 1.4.4
 
 # Set default Logstash source directory
 ENV LOGSTASH_SRC_DIR /opt/logstash
