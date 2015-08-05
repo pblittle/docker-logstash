@@ -1,22 +1,31 @@
 FROM java:7-jre
 MAINTAINER P. Barrett Little <barrett@barrettlittle.com> (@pblittle)
 
-# Download version 1.4.2 of logstash
+# Set default Logstash version
+ENV LOGSTASH_VERSION 1.4.4
+
+# Set default Logstash source directory
+ENV LOGSTASH_SRC_DIR /opt/logstash
+
+# Set default data directory
+ENV DATA_DIR /data
+
+# Download and install Logstash
 RUN cd /tmp && \
-    wget https://download.elasticsearch.org/logstash/logstash/logstash-1.4.2.tar.gz && \
-    tar -xzvf ./logstash-1.4.2.tar.gz && \
-    mv ./logstash-1.4.2 /opt/logstash && \
-    rm ./logstash-1.4.2.tar.gz
+    wget https://download.elastic.co/logstash/logstash/logstash-${LOGSTASH_VERSION}.tar.gz && \
+    tar -xzvf ./logstash-${LOGSTASH_VERSION}.tar.gz && \
+    mv ./logstash-${LOGSTASH_VERSION} ${LOGSTASH_SRC_DIR} && \
+    rm ./logstash-${LOGSTASH_VERSION}.tar.gz
 
 # Install contrib plugins
-RUN /opt/logstash/bin/plugin install contrib
+RUN ${LOGSTASH_SRC_DIR}/bin/plugin install contrib
 
 # Copy build files to container root
 RUN mkdir /app
 ADD . /app
 
-# Set default data directory
-ENV DATA_DIR /data
+# Set the working directory
+WORKDIR ${LOGSTASH_SRC_DIR}
 
 # Define mountable directory
 VOLUME ${DATA_DIR}

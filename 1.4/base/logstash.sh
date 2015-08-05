@@ -3,28 +3,15 @@
 # Fail fast, including pipelines
 set -e -o pipefail
 
-LOGSTASH_SRC_DIR='/opt/logstash'
-LOGSTASH_BINARY="${LOGSTASH_SRC_DIR}/bin/logstash"
-
-# If you don't provide a value for the LOGSTASH_CONFIG_URL env
-# var, your install will default to our very basic logstash.conf file.
-#
-LOGSTASH_DEFAULT_CONFIG_URL='https://gist.githubusercontent.com/pblittle/8778567/raw/logstash.conf'
-LOGSTASH_CONFIG_URL=${LOGSTASH_CONFIG_URL:-${LOGSTASH_DEFAULT_CONFIG_URL}}
-LOGSTASH_CONFIG_DIR="${LOGSTASH_SRC_DIR}/conf.d"
-LOGSTASH_CONFIG_PATH="${LOGSTASH_CONFIG_DIR}/**/*.conf"
-
-LOGSTASH_LOG_DIR='/var/log/logstash'
-LOGSTASH_LOG_FILE="${LOGSTASH_LOG_DIR}/logstash.log"
-
 # Download single config file. Source file extension must be .conf
 #
 function __download_config() {
     local config_url="$1"
     local config_dir="$2"
 
-    cd "${config_dir}" \
-        && curl -Os "${config_url}"
+    pushd "${config_dir}" > /dev/null
+    curl -Os "${config_url}"
+    popd > /dev/null
 }
 
 # Download and extract config file(s) using a tarball. Source file extension

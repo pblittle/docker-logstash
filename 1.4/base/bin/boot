@@ -12,6 +12,7 @@ set -e -o pipefail
 SCRIPT_ROOT=$(readlink -f "$(dirname "$0")"/..)
 export SCRIPT_ROOT
 
+. "${SCRIPT_ROOT}/config.sh" || exit 1
 . "${SCRIPT_ROOT}/elasticsearch.sh" || exit 1
 . "${SCRIPT_ROOT}/logstash.sh" || exit 1
 . "${SCRIPT_ROOT}/kibana.sh" || exit 1

@@ -3,10 +3,6 @@
 # Fail fast, including pipelines
 set -e -o pipefail
 
-KIBANA_CONFIG_FILE="${LOGSTASH_SRC_DIR}/vendor/kibana/config.js"
-
-readonly PROXY_PROTOCOL_REGEX='\(http[s]\?\)'
-
 function es_proxy_host() {
     local host=${ES_PROXY_HOST:-'"+window.location.hostname+"'}
 

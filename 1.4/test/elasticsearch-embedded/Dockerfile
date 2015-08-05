@@ -1,4 +1,4 @@
-FROM pblittle/docker-logstash:0.17.0
+FROM pblittle/docker-logstash:0.18.0
 MAINTAINER P. Barrett Little <barrett@barrettlittle.com> (@pblittle)
 
 # Download packages required to run the test suite
@@ -22,7 +22,6 @@ RUN git clone https://github.com/sstephenson/bats.git /tmp/bats \
 #
 ENV TERM xterm-256color
 
-WORKDIR /app
 ADD test.bats /app/test.bats
 
 CMD [ '/usr/local/bin/bats', '/app/test.bats' ]
