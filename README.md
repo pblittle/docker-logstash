@@ -1,6 +1,6 @@
 # Logstash Dockerfile
 
-This is a highly configurable [logstash][7] (1.4.4) image running [Elasticsearch][8] (1.7.0) and [Kibana][9] (3.1.2).
+This is a highly configurable [logstash][7] (1.4.5) image running [Elasticsearch][8] (1.7.0) and [Kibana][9] (3.1.2).
 
 ## How to use this image
 
