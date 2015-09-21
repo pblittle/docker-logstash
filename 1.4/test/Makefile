@@ -1,5 +1,5 @@
 NAME = pblittle/docker-logstash-test
-VERSION = 0.20.0-SNAPSHOT
+VERSION = 0.20.0
 
 BUILD_SRC = ${CURDIR}/../base
 
