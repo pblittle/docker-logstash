@@ -121,6 +121,7 @@ If you are using an external Elasticsearch server, simply set the `ES_HOST` and 
     $ docker run -d \
       -e ES_HOST=<your_es_service_host> \
       -e ES_PORT=<your_es_service_port> \
+      -p <your_es_service_port>=<your_es_service_port> \
       -p 9292:9292 \
       pblittle/docker-logstash
 
