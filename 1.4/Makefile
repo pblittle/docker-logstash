@@ -1,5 +1,5 @@
 NAME = pblittle/docker-logstash
-VERSION = 0.20.0-SNAPSHOT
+VERSION = 0.20.0
 
 # Set the LOGSTASH_CONFIG_URL env var to your logstash.conf file.
 # We will use our basic config if the value is empty.
@@ -9,7 +9,7 @@ LOGSTASH_CONFIG_URL ?= https://gist.githubusercontent.com/pblittle/8778567/raw/l
 # Set the default Elasticsearch host and port. This will replace the ES_HOST
 # and ES_PORT values in your logstash config.
 #
-ES_HOST ?= 
+ES_HOST ?=
 ES_PORT ?= 9200
 
 # Set the default Elasticsearch proxy host, port, and protocol. This will
