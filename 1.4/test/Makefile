@@ -11,6 +11,9 @@ build:
 test-elasticsearch-embedded: build
 
 	cd ${CURDIR}/elasticsearch-embedded && \
+.PHONY: test
+test:
+	cd ${TESTDIR} && \
 	docker-compose stop && \
 	docker-compose rm --force && \
 	docker-compose build && \
@@ -51,3 +54,6 @@ test-logstash-tarball-config: build
 	docker-compose rm --force && \
 	docker-compose build && \
 	docker-compose up --no-recreate
+.PHONY: test-logstash-forwarder
+test-logstash-forwarder: build
+	$(MAKE) -e TESTDIR=${CURDIR}/logstash-forwarder test
