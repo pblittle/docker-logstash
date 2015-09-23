@@ -35,3 +35,21 @@ KIBANA_CONFIG_FILE="${LOGSTASH_SRC_DIR}/vendor/kibana/config.js"
 
 # Kibana proxy regular expression
 readonly PROXY_PROTOCOL_REGEX='\(http[s]\?\)'
+
+# Logstash-forwarder SSL key directory
+readonly LF_SSL_DIR='/opt/ssl'
+
+# WARNING: The default logstash-forwarder keys are insecure. Please do not
+# use them in production.
+
+# Logstash-forwarder SSL key URL
+readonly LF_SSL_CERT_KEY_URL=${LF_SSL_CERT_KEY_URL:-"https://gist.githubusercontent.com/pblittle/8994708/raw/insecure-logstash-forwarder.key"}
+
+# Logstash-forwarder SSL certificate URL
+readonly LF_SSL_CERT_URL=${LF_SSL_CERT_URL:-"https://gist.githubusercontent.com/pblittle/8994726/raw/insecure-logstash-forwarder.crt"}
+
+# Logstash-forwarder SSL key path
+readonly LF_SSL_CERT_KEY_FILE="${LF_SSL_DIR}/logstash-forwarder.key"
+
+# Logstash-forwarder SSL certificate path
+readonly LF_SSL_CERT_FILE="${LF_SSL_DIR}/logstash-forwarder.crt"
