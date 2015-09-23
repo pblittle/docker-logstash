@@ -12,13 +12,19 @@ function forwarder_create_ssl_dir() {
 }
 
 function forwarder_download_cert() {
-    if [ ! -s "$LF_SSL_CERT_FILE" ]; then
-        wget "$LF_SSL_CERT_URL" -O "$LF_SSL_CERT_FILE"
+    local ssl_cert_file="$LF_SSL_CERT_FILE"
+    local ssl_cert_url="$LF_SSL_CERT_URL"
+
+    if [ ! -s "${ssl_cert_file}" ]; then
+        wget "${ssl_cert_url}" -O "${ssl_cert_file}"
     fi
 }
 
 function forwarder_download_key() {
-    if [ ! -s "$LF_SSL_CERT_KEY_FILE" ]; then
-        wget "$LF_SSL_CERT_KEY_URL" -O "$LF_SSL_CERT_KEY_FILE"
+    local ssl_cert_key_file="$LF_SSL_CERT_KEY_FILE"
+    local ssl_cert_key_url="$LF_SSL_CERT_KEY_URL"
+
+    if [ ! -s "${ssl_cert_key_file}" ]; then
+        wget "${ssl_cert_key_url}" -O "${ssl_cert_key_file}"
     fi
 }
