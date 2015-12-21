@@ -131,6 +131,10 @@ The embedded Elasticsearch server will be used by default if you don't provide e
 
 > Please note, the embedded Elasticsearch server was not designed for use in Production.
 
+To make the data directory persistent, you can bind mount it with the following argument for `docker run`:
+
+    -v $PWD/data:/opt/logstash/data
+
 ## Optional, build and run the image from source
 
 If you prefer to build from source rather than use the [pblittle/docker-logstash][1] trusted build published to the public Docker Registry, execute the following:
